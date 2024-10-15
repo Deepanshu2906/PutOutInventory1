@@ -1,0 +1,9 @@
+<mvc:View controllerName="config.controller.ConfigDashboard"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+           <GenericTile id="_IDGenGenericTile1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Material Status" press="onPressStatus" />
+        <GenericTile id="_IDGenGenericTile2" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Material Groups" press="onPressMGroup" />
+        <GenericTile id="_IDGenGenericTile3" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Storage Location" press="onPressSloc" />
+    </Page>
+</mvc:View>
