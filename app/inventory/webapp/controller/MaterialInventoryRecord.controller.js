@@ -138,7 +138,7 @@ sap.ui.define([
                 let oNewRow = {
                     SNo: iNextSNo.toString(),  // Convert to string for consistency
                     Category: "",
-                    Quantity: null,
+                    Quantity: "",
                     MaterialCode: "",
                     Description: "",
                     Status: "",
@@ -149,7 +149,7 @@ sap.ui.define([
                 aData.push(oNewRow);
             
                 // Update the model with the new data
-                oModel.setData({data:aData});
+                oModel.setData( { data : aData });
 
             },
 
@@ -171,7 +171,7 @@ sap.ui.define([
                     Description: "", // Empty for user input
                     MaterialCode: "", // Empty for user input
                     Category: "", // Empty for user input
-                    Quantity: null // Empty for user input
+                    Quantity: "" // Empty for user input
                 };
             
                 // Add the new subcomponent to the existing data
@@ -237,6 +237,7 @@ sap.ui.define([
                     Quantity : reqData.Quantity,
                     SubcomponentList : reqData.SubcomponentList
                 }, true);
+
                 oBindList.attachCreateCompleted ( (p)=>{
                     let p1 = p.getParameters();
                     let oContext = p1.context;
@@ -248,7 +249,6 @@ sap.ui.define([
                     }
 
                 })
-
 
 
             },
@@ -266,6 +266,7 @@ sap.ui.define([
             
                 // Helper function to create material and wait for completion
                 const createMaterial = (reqData) => {
+
                     return new Promise((resolve, reject) => {
                         // Create material entry
                         oBindList.create({
@@ -295,9 +296,14 @@ sap.ui.define([
                 // Process each material in the array sequentially
                 for (let i = 0; i < reqDataArray.length; i++) {
                     let reqData = reqDataArray[i];
+
+                    if( !reqData.Description && !reqData.Category && !reqData.Quantity ) {
+                        MessageBox.warning("Please add Materials details to proceed");
+                        return;
+                    }
             
                     // Generate MaterialCode only if SubcomponentList is not empty and MaterialCode is empty
-                    if (!reqData.MaterialCode && !reqData.SubcomponentList.length === 0) {
+                    if (!reqData.MaterialCode && !reqData.SubcomponentList.length ) {
                         MessageBox.warning("Please Add Subcomponents or Select material from Value help");
                         return;
                     }
@@ -333,7 +339,7 @@ sap.ui.define([
                 if (generatedCodes.length > 0) {
                     MessageBox.success(`Generated Material Codes: ${generatedCodes.join(', ')}`);
                 } else {
-                    MessageBox.warning("No Material Codes were generated. Ensure materials have subcomponents and empty MaterialCode.");
+                    MessageBox.warning("No Material found for Code Generation");
                 }
             },
             
@@ -371,9 +377,12 @@ sap.ui.define([
                 // Prepare the data for submission
                 materialDataArray.forEach(materialData => {
                     // Assign Parent_MaterialCode to all subcomponents
-                    materialData.SubcomponentList.forEach(subcomponent => {
-                        subcomponent.Parent_MaterialCode = materialData.MaterialCode;
-                    });
+                    if( materialData.SubcomponentList && materialData.SubcomponentList.length > 0 ) {
+
+                        materialData.SubcomponentList.forEach(subcomponent => {
+                            subcomponent.Parent_MaterialCode = materialData.MaterialCode;
+                        });
+                    }
             
                     // Remove unnecessary fields like SNo from submission
                     delete materialData.SNo;
@@ -396,7 +405,7 @@ sap.ui.define([
                     if (p1.success) {
                         let obj = oContext.getObject();
                         console.log(obj);
-                        MessageBox.success(`Material Request No.- ${obj.reqNo} Created successfully with all Materials`);
+                        MessageBox.success(`Material Request No.- ${obj.reqNo} Created Successfully.`);
             
                         // Refresh models after successful submission
                         oView.getModel().refresh();

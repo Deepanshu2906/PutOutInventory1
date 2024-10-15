@@ -7,8 +7,9 @@
         class="sapUiContentPadding"
         contentWidth="80%"
         contentHeight="25%"
-        title="SubComponents"
+        title="Subcomponents :-"
         afterClose="subcomponentDialogClose"
+        
     >
         <Table
             id="subComponentTable"
@@ -45,6 +46,7 @@
                         value="{subcomponentModel>Description}"
                         showValueHelp="true"
                         valueHelpRequest="showMaterialValueHelp2"
+                        valueHelpOnly="true"
                     />
 
                     <Input value="{subcomponentModel>Category}" editable="false" />
@@ -62,9 +64,10 @@
         <HBox justifyContent="Start">
             <Button
                 icon="sap-icon://add"
-                text="Add SubComponent"
+                text="Add Subcomponent"
                 press="onAddSubMaterial"
                 type="Emphasized"
+                class="sapUiTinyMarginTop"
             />
         </HBox>
         <beginButton>

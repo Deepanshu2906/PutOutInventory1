@@ -12,6 +12,7 @@
         items="{/Material}"
         initialFocus="SearchField"
         multiSelect="false"
+        contentWidth="480px"
         
     >
         

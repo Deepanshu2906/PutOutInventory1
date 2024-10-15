@@ -151,7 +151,7 @@
                                             type="Transparent"
                                         />
                                         <Button
-                                            text="Add SubComponents"
+                                            text="Add Subcomponents"
                                             press="onAddSubComponent"
                                             type="Emphasized"
                                             enabled="{= !${tempModel>MaterialCode} }"
@@ -167,6 +167,7 @@
                             class="submitButton"
                         >
                             <Button
+                                icon="sap-icon://add-activity-2"
                                 text="Generate Code"
                                 type="Attention"
                                 press="onGenerateCodePress"
