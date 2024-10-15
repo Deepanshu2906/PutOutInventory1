@@ -220,38 +220,7 @@ sap.ui.define([
                     this._MaterialDialog2.getBinding("items").filter([]);
                 }
             },
-            onGenerateCodePress1 : function ( oEvent ) {
-                let oView = this.getView();
-                let reqData = oView.getModel('tempModel').getData().data[0]; // assuming only one material
-                let genertedCode = undefined;
-                let oModel = oView.getModel();
-                let oBindList = oModel.bindList('/Material');
-                reqData.SubcomponentList.forEach((x)=>{
-                    delete x.SNo 
-                })
-                console.log(reqData);
-                oBindList.create({
-                    Description : reqData.Description,
-                    Category: reqData.Category,
-                    Status : "Material Created",
-                    Quantity : reqData.Quantity,
-                    SubcomponentList : reqData.SubcomponentList
-                }, true);
 
-                oBindList.attachCreateCompleted ( (p)=>{
-                    let p1 = p.getParameters();
-                    let oContext = p1.context;
-                    if (p1.success) {
-                      let obj = oContext.getObject();
-                      console.log(obj);
-                      MessageBox.success(`New Material ${obj.MaterialCode} Created successfully`);
-                      
-                    }
-
-                })
-
-
-            },
             onGenerateCodePress: async function (oEvent) {
                 let oView = this.getView();
                 let reqDataArray = oView.getModel('tempModel').getData().data; // Assuming multiple materials
@@ -317,16 +286,12 @@ sap.ui.define([
                         try {
                             // Await for the material creation and get the generated MaterialCode
                             let generatedCode = await createMaterial(reqData);
-                            generatedCodes.push(generatedCode);  // Collect the generated codes
+                            generatedCodes.push(`${i}_${generatedCode}`);  // Collect the generated codes
             
-                            // SubcomponentList is already updated with Parent_MaterialCode in createMaterial function
-            
-                            // Update only the modified material in the model
-                            let tempModelData = oView.getModel('tempModel').getData();
-                            tempModelData.data[i].MaterialCode = generatedCode; // Update MaterialCode only
-            
-                            oView.getModel('tempModel').setData(tempModelData); // Update the tempModel with the new material code
-                            oView.getModel('tempModel').refresh(true); // Refresh the specific row in tempModel
+                        
+                            // reqData.MaterialCode = generatedCode;
+                            reqData.SubcomponentList.forEach( x => x.Parent_MaterialCode = generatedCode)
+                        
             
                         } catch (error) {
                             console.log("Error creating material:", error);
@@ -334,16 +299,23 @@ sap.ui.define([
                         }
                     }
                 }
+                this.getView().getModel('tempModel').refresh()
             
                 // After processing all materials, show a success message with all generated codes
                 if (generatedCodes.length > 0) {
+                    generatedCodes.forEach(codePair => {
+                        let [index, code] = codePair.split('_');  // Split the index and generated code
+                        reqDataArray[index].MaterialCode = code;  // Assign the code back to the original material entry
+                    });
+            
+                    // Refresh the tempModel with updated material codes
+                    oView.getModel('tempModel').refresh();
                     MessageBox.success(`Generated Material Codes: ${generatedCodes.join(', ')}`);
                 } else {
                     MessageBox.warning("No Material found for Code Generation");
                 }
             },
             
-          
             onSubmitPress: function (oEvent) {
                 let oView = this.getView();
                 let materialDataArray = oView.getModel('tempModel').getData().data; // Assuming multiple materials
@@ -376,21 +348,23 @@ sap.ui.define([
             
                 // Prepare the data for submission
                 materialDataArray.forEach(materialData => {
-                    // Assign Parent_MaterialCode to all subcomponents
-                    if( materialData.SubcomponentList && materialData.SubcomponentList.length > 0 ) {
-
-                        materialData.SubcomponentList.forEach(subcomponent => {
-                            subcomponent.Parent_MaterialCode = materialData.MaterialCode;
+                    // Create a shallow copy of the materialData object to avoid modifying the original tempModel
+                    let copiedMaterialData = { ...materialData };  // or use Object.assign({}, materialData);
+                    
+                    // Remove unnecessary fields like SNo from submission
+                    delete copiedMaterialData.SNo;
+                    
+                    // Remove SNo from subcomponent list if present
+                    if (copiedMaterialData.SubcomponentList) {
+                        copiedMaterialData.SubcomponentList.forEach(subcomponent => {
+                            delete subcomponent.SNo;
                         });
                     }
             
-                    // Remove unnecessary fields like SNo from submission
-                    delete materialData.SNo;
-            
-                    // Push to the request payload
+                    // Push the copied and cleaned data to the request payload
                     requestMaterials.push({
-                        ...materialData,
-                        SubcomponentList: materialData.SubcomponentList
+                        ...copiedMaterialData,
+                        SubcomponentList: copiedMaterialData.SubcomponentList
                     });
                 });
             
@@ -416,9 +390,6 @@ sap.ui.define([
                 });
             },
             
-
-
-
             showCatergoryValueHelp : function ( oEvent ) {
 
                 this.oSource = oEvent.getSource().getBindingContext('tempModel');

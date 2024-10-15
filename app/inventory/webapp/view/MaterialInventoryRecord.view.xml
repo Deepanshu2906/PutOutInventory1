@@ -9,7 +9,8 @@
 >
     <Page
         id="page"
-        title="Material Inventory Record"
+        title="MATERIAL INVENTORY RECORD"
+        titleAlignment="Center"
     >
         <l:VerticalLayout
             id="_IDGenVerticalLayout1"
