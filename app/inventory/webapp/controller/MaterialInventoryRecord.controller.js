@@ -286,7 +286,7 @@ sap.ui.define([
                         try {
                             // Await for the material creation and get the generated MaterialCode
                             let generatedCode = await createMaterial(reqData);
-                            generatedCodes.push(`${i}_${generatedCode}`);  // Collect the generated codes
+                            generatedCodes.push(`${i+1}.${generatedCode}`);  // Collect the generated codes
             
                         
                             // reqData.MaterialCode = generatedCode;
@@ -304,8 +304,8 @@ sap.ui.define([
                 // After processing all materials, show a success message with all generated codes
                 if (generatedCodes.length > 0) {
                     generatedCodes.forEach(codePair => {
-                        let [index, code] = codePair.split('_');  // Split the index and generated code
-                        reqDataArray[index].MaterialCode = code;  // Assign the code back to the original material entry
+                        let [index, code] = codePair.split('.');  // Split the index and generated code
+                        reqDataArray[index - 1].MaterialCode = code;  // Assign the code back to the original material entry
                     });
             
                     // Refresh the tempModel with updated material codes
