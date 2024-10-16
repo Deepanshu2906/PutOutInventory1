@@ -103,6 +103,13 @@
           "target": [
             "TargetMaterialInventoryRecord"
           ]
+        },
+        {
+          "name": "RouteDashboard",
+          "pattern": "Dashboard",
+          "target": [
+            "TargetInventoryDashboard"
+          ]
         }
        
       ],
@@ -120,6 +127,13 @@
           "clearControlAggregation": false,
           "viewId": "MaterialInventoryRecord",
           "viewName": "MaterialInventoryRecord"
+        },
+        "TargetInventoryDashboard": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "InventoryDashboard",
+          "viewName": "InventoryDashboard"
         }
       }
     },

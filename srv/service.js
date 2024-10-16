@@ -6,6 +6,12 @@ module.exports = async (srv) => {
     srv.on('READ', 'Material_Status', req => {
         return cds.run(SELECT.from('mydb.Material_Status'));
     });
+    srv.on('CREATE', 'Material_Status', req => {
+        return cds.run(SELECT.from('mydb.Material_Status'));
+    });
+    srv.on('UPDATE', 'Material_Status', req => {
+        return cds.run(SELECT.from('mydb.Material_Status'));
+    });
 
     srv.on('READ', 'Category', req => {
         return cds.run(SELECT.from('mydb.Category'));
@@ -102,6 +108,14 @@ module.exports = async (srv) => {
 
 
     srv.on('READ', 'StorageLocation', req => {
+        return cds.run(SELECT.from('mydb.StorageLocation'));
+    });
+
+    srv.on('CREATE', 'StorageLocation', req => {
+        return cds.run(SELECT.from('mydb.StorageLocation'));
+    });
+
+    srv.on('UPDATE', 'StorageLocation', req => {
         return cds.run(SELECT.from('mydb.StorageLocation'));
     });
 

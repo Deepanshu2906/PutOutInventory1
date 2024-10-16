@@ -12,7 +12,7 @@ service inventoryService {
     entity Subcomponent as projection on mydb.Subcomponent;
 
 
-    entity Material_Status as projection on mydb.Statuses;
+    entity Material_Status as projection on mydb.Material_Status;
 
     entity serviceRequest as projection on mydb.serviceRequest
         

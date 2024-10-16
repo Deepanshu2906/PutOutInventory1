@@ -27,7 +27,10 @@
   "cds": {
     "requires": {
       "auth": "mocked",
-      "db": "sqlite"
+      "db": "hana"
+    },
+    "sql": {
+      "native_hana_associations": false
     }
   }
 }

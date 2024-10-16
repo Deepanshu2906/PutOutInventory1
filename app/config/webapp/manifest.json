@@ -96,6 +96,34 @@
           "target": [
             "TargetConfigDashboard"
           ]
+        },
+        {
+          "name": "RouteStatus",
+          "pattern": "status",
+          "target": [
+            "TargetConfigStatus"
+          ]
+        },
+        {
+          "name": "RouteGroup",
+          "pattern": "group",
+          "target": [
+            "TargetConfigGroup"
+          ]
+        },
+        {
+          "name": "RouteGroup",
+          "pattern": "group",
+          "target": [
+            "TargetConfigGroup"
+          ]
+        },
+        {
+          "name": "RouteLocation",
+          "pattern": "storageLocation",
+          "target": [
+            "TargetConfigStorageLocation"
+          ]
         }
       ],
       "targets": {
@@ -105,6 +133,27 @@
           "clearControlAggregation": false,
           "viewId": "ConfigDashboard",
           "viewName": "ConfigDashboard"
+        },
+        "TargetConfigStatus": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "MaterialStatus",
+          "viewName": "MaterialStatus"
+        },
+        "TargetConfigGroup": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "MaterialGroup",
+          "viewName": "MaterialGroup"
+        },
+        "TargetConfigStorageLocation": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "StorageLocation",
+          "viewName": "StorageLocation"
         }
       }
     },

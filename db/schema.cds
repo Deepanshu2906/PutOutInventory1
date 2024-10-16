@@ -6,7 +6,7 @@ entity Material  {
 
     key MaterialCode     : String(20);                      
     Category             : String(1);       
-    key Description      : String(255);                    
+    Description          : String(255);                    
     Status               : String(20);
     Quantity             : Integer;  
     SubcomponentList     : Composition of many Subcomponent on SubcomponentList.Parent = $self;  
@@ -17,6 +17,7 @@ entity serviceRequest : managed {
     key reqNo : Integer;
     Materials : array of rqMaterial;
     createdBy : String(100) @cds.on.insert : $user.id; 
+    reqStatus : String(20);
 
 }
 type  rqMaterial {
@@ -40,7 +41,7 @@ type rqSubMaterial {
 }
 
 entity Subcomponent {
-    Key ID           : Integer;  
+    key ID           : Integer;  
     Category         : String(1);
     Description      : String(20);
     MaterialCode     : String(10);
@@ -59,12 +60,11 @@ entity Category  {
 
 entity StorageLocation {
     key LocationID       : String(10);            
-    LocationName         : String(100);
-    Category             : Association to one Category;                        
+    LocationName         : String(100);                       
 }
 
 
-entity Statuses {
+entity Material_Status {
     key StatusCode : String(3);
     Description    : String(50);
 }

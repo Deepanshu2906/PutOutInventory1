@@ -10,15 +10,15 @@ function (Controller) {
         },
         onPressSloc: function(){
             const createP = this.getOwnerComponent().getRouter();
-            createP.navTo("RoutecreateProfile");
+            createP.navTo("RouteLocation");
         },
         onPressStatus: function(){
             const pathFuel = this.getOwnerComponent().getRouter();
-            pathFuel.navTo("RoutepathFuel");
+            pathFuel.navTo("RouteStatus");
         },
         onPressMGroup: function(){
             const pathFuel = this.getOwnerComponent().getRouter();
-            pathFuel.navTo("RoutepathFuel");
+            pathFuel.navTo("RouteGroup");
         },
     });
 });

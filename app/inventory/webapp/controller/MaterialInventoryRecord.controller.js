@@ -370,7 +370,8 @@ sap.ui.define([
             
                 // Submit the service request with all materials
                 oBindList.create({
-                    Materials: requestMaterials // Array of materials with subcomponents
+                    Materials: requestMaterials, // Array of materials with subcomponents
+                    reqStatus : "Open"
                 }, true);
             
                 oBindList.attachCreateCompleted(p => {

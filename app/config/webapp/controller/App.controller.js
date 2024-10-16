@@ -7,7 +7,10 @@ sap.ui.define(
   
       return BaseController.extend("config.controller.App", {
         onInit: function() {
-        }
+        },
+        onPressBack: function () {
+          window.history.back();
+        },
       });
     }
   );

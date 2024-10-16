@@ -1,10 +1,27 @@
 /* Enter your custom styles here */
 
+
 .submitButton{
     margin-top: 20px;
 }
-/* .materialTable{
-    border: 1px solid grey;
-    
-} */
+.flexBox{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.GoBtn{
+    align-items: end;  
+}
+.refreshBtn{
+    margin-left: 5px;
+}
+.dashboardTable th{
+    border: 1px solid #ddd;
+    background-color: #e9f6f7;
+}
+.dashboardTable td{
+    border: 1px solid #ddd;
+}
+
+
 
