@@ -12,6 +12,15 @@ entity Material  {
     SubcomponentList     : Composition of many Subcomponent on SubcomponentList.Parent = $self;  
 
 }
+
+entity Subcomponent {
+    key ID           : Integer;  
+    Category         : String(1);
+    Description      : String(20);
+    MaterialCode     : String(10);
+    Parent           : Association to Material;
+    Quantity         : Integer;
+}
 entity serviceRequest : managed {
 
     key reqNo : Integer;
@@ -40,14 +49,6 @@ type rqSubMaterial {
 
 }
 
-entity Subcomponent {
-    key ID           : Integer;  
-    Category         : String(1);
-    Description      : String(20);
-    MaterialCode     : String(10);
-    Parent           : Association to Material;
-    Quantity         : Integer;
-}
 
 entity Category  {
     key ID               : String(10);                      

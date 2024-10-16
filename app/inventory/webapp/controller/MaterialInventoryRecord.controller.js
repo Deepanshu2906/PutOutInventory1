@@ -19,8 +19,7 @@ sap.ui.define([
                     Quantity: null,
                     MaterialCode: "",
                     Description:"",
-                    Status:"",
-                    SubcomponentList:null
+                    SubcomponentList: []
 
 
                 }]
@@ -84,6 +83,7 @@ sap.ui.define([
             onAddSubComponent: function (oEvent) {
 
                 this.oSourceRow = oEvent.getSource().getBindingContext('tempModel');
+                // taking refrence of tempModel row
                 let SourceRowData = this.oSourceRow.getObject().SubcomponentList
                 let subcomponentModel = new JSONModel();
                 let subPayload = {
@@ -171,7 +171,8 @@ sap.ui.define([
                     Description: "", // Empty for user input
                     MaterialCode: "", // Empty for user input
                     Category: "", // Empty for user input
-                    Quantity: "" // Empty for user input
+                    Quantity: "" ,// Empty for user input
+                    Parent_MaterialCode : ""
                 };
             
                 // Add the new subcomponent to the existing data

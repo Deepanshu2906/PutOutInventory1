@@ -87,7 +87,10 @@ module.exports = async (srv) => {
                 const subcomponent = SubcomponentList[i];
 
                 // Insert each subcomponent into the Subcomponent table, linking it to the parent MaterialCode
+                const result = await cds.run(SELECT.one.from('mydb.Subcomponent').columns('max(ID) as maxID'));
+                const maxID = result?.maxID || 1; // If no records, default to 0
                 const newSubcomponent = {
+                    ID : maxID +1 ,
                     Parent_MaterialCode: combinedMaterialCode, // Parent's combined MaterialCode
                     Category: subcomponent.Category,
                     Description: subcomponent.Description,
