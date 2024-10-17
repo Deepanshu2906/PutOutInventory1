@@ -25,10 +25,7 @@
     "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
   },
   "cds": {
-    "requires": {
-      "auth": "mocked",
-      "db": "hana"
-    },
+   
     "sql": {
       "native_hana_associations": false
     }

@@ -1,26 +1,26 @@
 <mvc:View
     controllerName="config.controller.StorageLocation"
-    xmlns:mvc="sap.ui.core.mvc"
+   xmlns:mvc="sap.ui.core.mvc"
     displayBlock="true"
     xmlns:l="sap.ui.layout"
     xmlns:form="sap.ui.layout.form"
     xmlns="sap.m"
 >
     <Page
-        id="page"
+        id="page1"
         title="Storage Location"
     >
         <l:VerticalLayout
-            id="_IDGenVerticalLayout1"
+            id="_IDGenVerticalLayout11"
             width="98%"
         >
             <l:BlockLayout
-                id="_IDGenBlockLayout1"
+                id="_IDGenBlockLayout11"
                 background="Dashboard"
             >
-                <l:BlockLayoutRow id="_IDGenBlockLayoutRow1">
+                <l:BlockLayoutRow id="_IDGenBlockLayoutRow11">
                     <l:BlockLayoutCell
-                        id="_IDGenBlockLayoutCell1"
+                        id="_IDGenBlockLayoutCell11"
                         width="90%"
                     >
                         <HBox
@@ -79,11 +79,11 @@
                                 <ColumnListItem id="_IDGenColumnListItem">
                                     <cells>
                                         <Text
-                                            id="_IDGenText4"
+                                            id="_IDGenText41"
                                             text="{locationModel>LocationID}"
                                         />
                                         <Text
-                                            id="_IDGenText5"
+                                            id="_IDGenText51"
                                             text="{locationModel>LocationName}"
                                         />
                                     </cells>

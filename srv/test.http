@@ -1,6 +1,24 @@
-### DELETE
+### GET
+GET http://localhost:4004/odata/v4/inventory/Material_Status
 
-GET http://localhost:4004/odata/v4/inventory/serviceRequest
+### POST STATUS
+PUT http://localhost:4004/odata/v4/inventory/Material_Status/FTR
+Content-Type: application/json
+
+{
+  "StatusCode":"FTR",
+  "Description":"testing10"
+}
+### GET
+GET http://localhost:4004/odata/v4/inventory/StorageLocation
+### 
+PUT http://localhost:4004/odata/v4/inventory/StorageLocation/LOC03
+Content-Type: application/json
+
+{
+  "LocationID":"LOC03",
+  "LocationName":"testin"
+}
 
 ### create
 POST http://localhost:4004/odata/v4/inventory/serviceRequest

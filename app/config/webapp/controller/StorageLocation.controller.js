@@ -1,39 +1,40 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageToast",
-    "sap/m/MessageBox"  // Add this line to import MessageBox
-], function (Controller, MessageToast, MessageBox) {
+    "sap/m/MessageBox" ,
+    "sap/ui/model/Filter" // Add this line to import MessageBox
+], function (Controller, MessageToast, MessageBox,Filter) {
     "use strict";
     var sLocationID
 
     return Controller.extend("config.controller.StorageLocation", {
         onInit: function () {
-        this.onStorageLocation();
-           
+            this.onStorageLocation();
+
         },
 
-        onStorageLocation : function(){
-             // Create a JSON Model to hold the StorageLocation data
-             var locationModel = new sap.ui.model.json.JSONModel();
-             this.getView().setModel(locationModel, "locationModel");
- 
-             // Retrieve data from the OData service
-             let oModel = this.getOwnerComponent().getModel();
-             let oBindList = oModel.bindList("/StorageLocation");
- 
-             // Fetch data and set it to the JSON model
-             oBindList.requestContexts(0, Infinity).then(function (aContexts) {
-                 var locationData = [];
-                 aContexts.forEach(function (oContext) {
-                     locationData.push(oContext.getObject());
-                 });
- 
-                 // Set the data to the locationModel
-                 locationModel.setData({ StorageLocations: locationData });
- 
-                 // Debugging output (optional)
-                 console.log("location", locationData);
-             });
+        onStorageLocation: function () {
+            // Create a JSON Model to hold the StorageLocation data
+            var locationModel = new sap.ui.model.json.JSONModel();
+            this.getView().setModel(locationModel, "locationModel");
+
+            // Retrieve data from the OData service
+            let oModel = this.getOwnerComponent().getModel();
+            let oBindList = oModel.bindList("/StorageLocation");
+
+            // Fetch data and set it to the JSON model
+            oBindList.requestContexts(0, Infinity).then(function (aContexts) {
+                var locationData = [];
+                aContexts.forEach(function (oContext) {
+                    locationData.push(oContext.getObject());
+                });
+
+                // Set the data to the locationModel
+                locationModel.setData({ StorageLocations: locationData });
+
+                // Debugging output (optional)
+                console.log("location", locationData);
+            });
 
         },
 
@@ -50,16 +51,16 @@ sap.ui.define([
             // Get values from the input fields
             var locationID = this.byId("locationIDInput").getValue().trim();
             var locationName = this.byId("locationNameInput").getValue().trim();
-        
+
             // Validate input fields
             if (!locationID || !locationName) {
                 MessageToast.show("Both Location ID and Location Name must be filled in.");
                 return; // Exit if validation fails
             }
-        
+
             let oModel = this.getView().getModel();
             let oBindList = oModel.bindList("/StorageLocation");
-        
+
             // Check if the locationID already exists
             let idFilter = new sap.ui.model.Filter("LocationID", sap.ui.model.FilterOperator.EQ, locationID);
             oBindList.filter(idFilter).requestContexts().then(function (aContexts) {
@@ -68,7 +69,7 @@ sap.ui.define([
                     MessageToast.show("Location ID already exists. Please use a different ID.");
                     return; // Exit if validation fails
                 }
-        
+
                 // Check if the locationName already exists
                 let nameFilter = new sap.ui.model.Filter("LocationName", sap.ui.model.FilterOperator.EQ, locationName);
                 oBindList.filter(nameFilter).requestContexts().then(function (aContextsByName) {
@@ -77,36 +78,36 @@ sap.ui.define([
                         MessageToast.show("Location Name already exists. Please use a different name.");
                         return; // Exit if validation fails
                     }
-        
+
                     // Prepare the data entry
                     var locationEntry = {
                         LocationID: locationID,
                         LocationName: locationName,
                     };
-        
+
                     console.log("locationEntry", locationEntry);
-        
+
                     // Create the new entry in the OData service
                     oBindList.create(locationEntry);
-        
+
                     // Refresh the model and the storage locations after creation
                     oModel.refresh();
                     this.onStorageLocation();
-        
+
                     // Show success message
                     MessageToast.show("Location Created: " + locationID + " - " + locationName);
-        
+
                     // Clear the input fields
                     this.byId("locationIDInput").setValue("");
                     this.byId("locationNameInput").setValue("");
-        
+
                     // Close the dialog
                     this.createDialog.close();
                 }.bind(this)); // Bind the context for the callback
             }.bind(this)); // Bind the context for the first callback
         },
-        
-        
+
+
 
         onDialogCancelPress: function () {
             // Close the create dialog
@@ -139,9 +140,9 @@ sap.ui.define([
             var LocationName = this.getView().byId("editLocationNameInput").getValue();
             let oModel = this.getView().getModel();
             let oBindList = oModel.bindList("/StorageLocation");
-        
             let aFilter = new sap.ui.model.Filter("LocationID", sap.ui.model.FilterOperator.EQ, LocationId);
-        
+
+
             oBindList.filter(aFilter).requestContexts().then(function (aContexts) {
                 if (aContexts.length > 0) {
                     aContexts[0].setProperty("LocationName", LocationName);
@@ -151,10 +152,10 @@ sap.ui.define([
                     MessageToast.show("Location not found.");
                 }
             }.bind(this));
-            
+
             this.editDialog.close();
         },
-        
+
         onDialogCancelEditPress: function () {
             this.editDialog.close();
         },
@@ -177,17 +178,17 @@ sap.ui.define([
         onDeletePress: function () {
             var oTable = this.byId("storageTable");
             var oSelectedItem = oTable.getSelectedItem();
-        
+
             // Check if there are storage locations to delete from
             if (oTable.getBinding("items").getLength() === 0) {
                 MessageToast.show("No storage locations available.");
                 return;
             }
-        
+
             if (oSelectedItem) {
                 // Get the binding context of the selected item
                 var oContext = oSelectedItem.getBindingContext("locationModel");
-        
+
                 // Confirm deletion
                 MessageBox.confirm("Are you sure you want to delete this storage location?", {
                     title: "Confirm Deletion",
@@ -196,9 +197,9 @@ sap.ui.define([
                             // Proceed with deletion
                             let oModel = this.getView().getModel();
                             let oBindList = oModel.bindList("/StorageLocation");
-        
+
                             let aFilter = new sap.ui.model.Filter("LocationID", sap.ui.model.FilterOperator.EQ, sLocationID);
-        
+
                             oBindList.filter(aFilter).requestContexts().then(function (aContexts) {
                                 if (aContexts.length > 0) {
                                     aContexts[0].delete(); // Delete the selected item
@@ -215,8 +216,6 @@ sap.ui.define([
                 MessageToast.show("Please select a row to delete.");
             }
         }
-        
-
 
     });
 });

@@ -30,7 +30,7 @@ entity serviceRequest : managed {
 
 }
 type  rqMaterial {
-
+    reqNo            : Integer;
     Category         : String(1);
     MaterialCode     : String(20);
     Description      : String(255);
@@ -48,8 +48,6 @@ type rqSubMaterial {
 
 
 }
-
-
 entity Category  {
     key ID               : String(10);                      
     Type                 : String(1);  
