@@ -27,7 +27,7 @@
                     <Text text="Category" />
                 </Column>
                 <Column>
-                    <Text text="Quantity" />
+                    <Label text="Quantity"  required="true"/>
                 </Column>
                 <Column width="20%">
                     <Text text="Material Code" />

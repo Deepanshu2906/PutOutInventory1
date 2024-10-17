@@ -1,6 +1,10 @@
 ### GET
 GET http://localhost:4004/odata/v4/inventory/Material_Status
 
+###
+GET http://localhost:4004/odata/v4/inventory/StorageLocation?$filter=LocationID eq 'LOC02'
+
+
 ### POST STATUS
 PUT http://localhost:4004/odata/v4/inventory/Material_Status/FTR
 Content-Type: application/json

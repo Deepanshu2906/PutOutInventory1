@@ -53,9 +53,12 @@
                                     id="_IDGenColumn3"
                                     width="35%"
                                 >
-                                    <Text
+                                    <Label
                                         id="_IDGenText3"
                                         text="Description"
+                                        required="true"
+
+                                        
                                     />
                                 </Column>
 
@@ -63,9 +66,10 @@
                                     id="_IDGenColumn4"
                                     width="10%"
                                 >
-                                    <Text
+                                    <Label
                                         id="_IDGenText4"
                                         text="Category"
+                                        required="true"
                                     />
                                 </Column>
 
@@ -73,16 +77,17 @@
                                     id="_IDGenColumn5"
                                     width="8%"
                                 >
-                                    <Text
+                                    <Label
                                         id="_IDGenText5"
                                         text="Quantity"
+                                        required="true"
                                     />
                                 </Column>
                                 <Column
                                     id="_IDGenCmn5"
                                     width="20%"
                                 >
-                                    <Text
+                                    <Label
                                         id="_IDGenTxt5"
                                         text="Material Code"
                                     />
@@ -122,18 +127,21 @@
                                             valueHelpRequest="showMaterialValueHelp"
                                             showValueHelp="true"
                                             value="{tempModel>Description}"
+                                            required="true"
                                         />
 
                                         <Input
                                             value="{tempModel>Category}"
                                             showValueHelp="true"
                                             valueHelpRequest="showCatergoryValueHelp"
+                                            required="true"
                                         />
                                         <Input
                                             id="Quantity"
                                             liveChange="onLiveChange"
                                             type="Number"
                                             value="{tempModel>Quantity}"
+                                            required="true"
                                         />
                                         <Input
                                             id="MaterialCode"
