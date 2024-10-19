@@ -14,7 +14,11 @@ service inventoryService {
 
     entity Material_Status as projection on mydb.Material_Status;
 
-    entity serviceRequest as projection on mydb.serviceRequest
+    entity serviceRequest as projection on mydb.serviceRequest;
+
+    entity rqMaterial as projection on mydb.rqMaterial;
+    
+    entity rqSubMaterial as projection on mydb.rqSubMaterial
         
     
 

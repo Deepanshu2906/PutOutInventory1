@@ -20,27 +20,92 @@ module.exports = async (srv) => {
     });
     srv.on('CREATE', 'serviceRequest', async (req) => {
         const tx = cds.transaction(req);
-        
+    
         // Fetch the maximum reqNo in the table
         const lastRequest = await tx.run(SELECT.one.from('mydb.serviceRequest').columns('max(reqNo) as maxReqNo'));
-        
+    
         // Determine the next reqNo, start from 40001 if no entries exist
         const nextReqNo = lastRequest.maxReqNo ? lastRequest.maxReqNo + 1 : 40001;
     
         // Assign the generated reqNo to the incoming request data
         req.data.reqNo = nextReqNo;
     
-        // Proceed with the creation
-         // If there is a Materials array in the request, add reqNo to each material object
+    
+    
+        // Check if Materials array exists and process it
         if (req.data.Materials && Array.isArray(req.data.Materials)) {
-        req.data.Materials.forEach(material => {
-            material.reqNo = nextReqNo; // Assign reqNo to each material
-        });
+            // Loop through each material to assign reqNo and insert into rqMaterial
+            for (let material of req.data.Materials) {
+                material.reqNo = nextReqNo; // Assign reqNo to each material
+                
+                // Insert into rqMaterial table
+                await tx.run(INSERT.into('mydb.rqMaterial').entries({
+                    reqNo: material.reqNo,
+                    MaterialCode: material.MaterialCode,
+                    Category: material.Category,
+                    Description: material.Description,
+                    Status: material.Status,
+                    Remarks: material.Remarks,
+                    Quantity: parseInt(material.Quantity)
+                }));
+    
+                // Check if SubcomponentList exists for the material and process it
+                if (material.SubcomponentList && Array.isArray(material.SubcomponentList)) {
+                    for (let subMaterial of material.SubcomponentList) {
+                        // Assign the parent MaterialCode and insert into rqSubMaterial
+                        subMaterial.Parent_MaterialCode = material.MaterialCode;
+    
+                        await tx.run(INSERT.into('mydb.rqSubMaterial').entries({
+                            Parent_MaterialCode: subMaterial.Parent_MaterialCode,
+                            MaterialCode: subMaterial.MaterialCode,
+                            Category: subMaterial.Category,
+                            Description: subMaterial.Description,
+                            Quantity: parseInt(subMaterial.Quantity)
+                        }));
+                    }
+                }
+            }
         }
-        
-        await tx.run(INSERT.into('mydb.serviceRequest').entries(req.data));
-        return cds.run(SELECT.from('mydb.serviceRequest').where({ reqNo: nextReqNo }));
+            // First insert the main serviceRequest
+        await tx.run(INSERT.into('mydb.serviceRequest').entries({
+            reqNo: nextReqNo,
+            createdBy: req.data.createdBy,
+            reqStatus: req.data.reqStatus
+        }));
+    
+        // Return the created serviceRequest with expanded Materials and SubcomponentList
+        return cds.run(SELECT.from('mydb.serviceRequest')
+            .where({ reqNo: nextReqNo })
+            // .expand('Materials', (m) => {
+            //     m.expand('SubcomponentList');
+            // })
+        );
     });
+    
+
+    // srv.on('CREATE', 'serviceRequest', async (req) => {
+    //     const tx = cds.transaction(req);
+        
+    //     // Fetch the maximum reqNo in the table
+    //     const lastRequest = await tx.run(SELECT.one.from('mydb.serviceRequest').columns('max(reqNo) as maxReqNo'));
+        
+    //     // Determine the next reqNo, start from 40001 if no entries exist
+    //     const nextReqNo = lastRequest.maxReqNo ? lastRequest.maxReqNo + 1 : 40001;
+    
+    //     // Assign the generated reqNo to the incoming request data
+    //     req.data.reqNo = nextReqNo;
+    
+    //     // Proceed with the creation
+    //      // If there is a Materials array in the request, add reqNo to each material object
+    //     if (req.data.Materials && Array.isArray(req.data.Materials)) {
+    //     req.data.Materials.forEach(material => {
+    //         material.reqNo = nextReqNo; // Assign reqNo to each material
+    //     });
+    //     }
+        
+    //     await tx.run(INSERT.into('mydb.serviceRequest').entries(req.data));
+    //     return cds.run(SELECT.from('mydb.serviceRequest').where({ reqNo: nextReqNo }));
+    // });
     
 
     srv.on('CREATE', 'Material', async (req) => {
