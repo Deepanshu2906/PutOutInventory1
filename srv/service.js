@@ -71,7 +71,8 @@ module.exports = async (srv) => {
         await tx.run(INSERT.into('mydb.serviceRequest').entries({
             reqNo: nextReqNo,
             createdBy: req.data.createdBy,
-            reqStatus: req.data.reqStatus
+            reqStatus: req.data.reqStatus,
+            Materials : []
         }));
     
         // Return the created serviceRequest with expanded Materials and SubcomponentList
@@ -197,10 +198,11 @@ module.exports = async (srv) => {
     //     await cds.run(UPDATE('mydb.StorageLocation').set(req.data).where({ LocationID: req.data.LocationID }));
     // });
 
-    // READ operation for serviceRequest
+    
     srv.on('READ', 'serviceRequest', req => {
         return cds.run(SELECT.from('mydb.serviceRequest'));
     });
+
 
    
 };

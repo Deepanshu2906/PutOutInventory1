@@ -364,7 +364,7 @@ sap.ui.define([
                     if (copiedMaterialData.SubcomponentList) {
                         copiedMaterialData.SubcomponentList.forEach(subcomponent => {
                             subcomponent.Quantity = parseInt(subcomponent.Quantity)
-                             subcomponent.reqNo = 0;
+                             subcomponent.reqNo = 0;   // can not send null
                             delete subcomponent.SNo;
                         });
                     }
@@ -379,7 +379,7 @@ sap.ui.define([
                 // Submit the service request with all materials
                 oBindList.create({
                     Materials: requestMaterials, // Array of materials with subcomponents
-                    reqStatus : "Open"
+                    reqStatus : "Open",
                 }, true);
             
                 oBindList.attachCreateCompleted(p => {
