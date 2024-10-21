@@ -34,11 +34,26 @@ entity rqMaterial : managed {
     Category         : String(1);
     Description      : String(255);
     Status           : String(20);
-    Remarks          : String(255);
+    Remarks          : String(255);                                                                                                                                                                  
     Quantity         : Integer;
     SubcomponentList : Composition of many rqSubMaterial on SubcomponentList.Parent_MaterialCode = $self.MaterialCode;
 }
 
+entity splitMaterilalTable {
+    key reqNo           : Integer;
+    key MaterialCode    : String(20);
+    key Status          : String;
+    Remarks             : String;
+    Quantity            : Integer;
+}
+entity splitSubMaterialTable {
+    key reqNo : Integer;
+    key MaterialCode : String;
+    key Parent_MaterialCode : String;
+    key Status : String;
+    Quantity : Integer;
+    Remarks : String
+}
 entity rqSubMaterial : managed {
     key Parent_MaterialCode : String(20);
     key MaterialCode        : String(10);
