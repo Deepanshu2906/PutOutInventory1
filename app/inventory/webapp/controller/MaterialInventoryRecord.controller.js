@@ -239,14 +239,18 @@ sap.ui.define([
 
                     return new Promise((resolve, reject) => {
                         // Create material entry
-                        oBindList.create({
+                        if( reqData.SubcomponentList.length ){
+                            reqData.SubcomponentList.forEach( subcomponent => subcomponent.Quantity = parseInt(subcomponent.Quantity) )
+                        }
+                        let payload =  {
                             Description: reqData.Description,
                             Category: reqData.Category,
                             MaterialCode: reqData.MaterialCode,
                             Status: "Active",
-                            Quantity: reqData.Quantity,
+                            Quantity: parseInt(reqData.Quantity),
                             SubcomponentList: reqData.SubcomponentList
-                        }, true);
+                        }
+                        oBindList.create( payload , true);
             
                         // Attach the create completion handler
                         oBindList.attachCreateCompleted((p) => {
@@ -350,6 +354,7 @@ sap.ui.define([
                 // Prepare the data for submission
                 materialDataArray.forEach(materialData => {
                     // Create a shallow copy of the materialData object to avoid modifying the original tempModel
+                    materialData.Quantity = parseInt( materialData.Quantity)
                     let copiedMaterialData = { ...materialData };  // or use Object.assign({}, materialData);
                     
                     // Remove unnecessary fields like SNo from submission
@@ -358,6 +363,8 @@ sap.ui.define([
                     // Remove SNo from subcomponent list if present
                     if (copiedMaterialData.SubcomponentList) {
                         copiedMaterialData.SubcomponentList.forEach(subcomponent => {
+                            subcomponent.Quantity = parseInt(subcomponent.Quantity)
+                             subcomponent.reqNo = 0;
                             delete subcomponent.SNo;
                         });
                     }

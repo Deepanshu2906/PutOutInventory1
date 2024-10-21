@@ -60,7 +60,8 @@ module.exports = async (srv) => {
                             MaterialCode: subMaterial.MaterialCode,
                             Category: subMaterial.Category,
                             Description: subMaterial.Description,
-                            Quantity: parseInt(subMaterial.Quantity)
+                            Quantity: parseInt(subMaterial.Quantity),
+                            reqNo : material.reqNo
                         }));
                     }
                 }
@@ -169,7 +170,7 @@ module.exports = async (srv) => {
                     Category: subcomponent.Category,
                     Description: subcomponent.Description,
                     MaterialCode: subcomponent.MaterialCode, // Keep subcomponent's original MaterialCode
-                    Quantity: subcomponent.Quantity
+                    Quantity: parseInt(subcomponent.Quantity)
                 };
                 console.log(`subcompoent ${i}`, newSubcomponent);
 

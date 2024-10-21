@@ -42,6 +42,7 @@ entity rqMaterial : managed {
 entity rqSubMaterial : managed {
     key Parent_MaterialCode : String(20);
     key MaterialCode        : String(10);
+    key reqNo               : Integer;
     Category                : String(1);
     Description             : String(20);
     Quantity                : Integer;
