@@ -1,6 +1,15 @@
 ### GET
 GET http://localhost:4004/odata/v4/inventory/Material_Status
 
+### create
+POST http://localhost:4004/odata/v4/inventory/Material_Status
+Content-Type: application/json
+
+{
+  "StatusCode":"ddd",
+  "Description":"testing10"
+}
+
 ###
 GET http://localhost:4004/odata/v4/inventory/StorageLocation?$filter=LocationID eq 'LOC02'
 
