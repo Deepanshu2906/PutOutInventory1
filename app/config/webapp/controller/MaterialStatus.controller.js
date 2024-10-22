@@ -34,19 +34,16 @@ function (Controller,JSONModel,Fragment,MessageBox,MessageToast) {
 
        
         onSave :function(){
-            var oView = this.getView();
             var oTable = this.byId("materialStatusTable");
-            var oModels = oView.getModel("addMaterialStatusModel");
-            var addStatusdata = this.getView().getModel("addMaterialStatusModel").getData();
+            let statusCode = sap.ui.getCore().byId("sfCode").getValue()
+            let statusDesc = sap.ui.getCore().byId("sfDesc").getValue()
+            var oModel = this.getView().getModel(); 
 
-            let StatusCode = addStatusdata.StatusCode;
-            let StatusDescription = addStatusdata.Description
-            let payload = { 
-                StatusCode:StatusCode ,
-                Description:StatusDescription
+            let payload ={
+                StatusCode:statusCode ,
+                Description:statusDesc
             }
-            let oModel = this.getView().getModel();
-         
+
             let oBindListSPM = oModel.bindList("/Material_Status");
             oBindListSPM.create(payload);
              
@@ -54,6 +51,31 @@ function (Controller,JSONModel,Fragment,MessageBox,MessageToast) {
             this.getView().getModel().refresh();
             setTimeout (() =>{
             sap.m.MessageToast.show("Material Status added successfully");
+            }, 1000);
+            oTable.removeSelections();
+        },
+
+        _onSaveMaterialEntry :function(){
+            var oTable = this.byId("materialGroupTable");
+            let idField = sap.ui.getCore().byId("idField").getValue()
+            let typeField = sap.ui.getCore().byId("typeField").getValue()
+            let locationIdField = sap.ui.getCore().byId("locationIdField").getValue()
+            let ZcodeField = sap.ui.getCore().byId("ZcodeField").getValue()
+            let usabilityInput = sap.ui.getCore().byId("usabityInput").getValue()
+            var oModel = this.getView().getModel();  
+            let payload = {
+                "ID": idField,
+                "Type": typeField,
+                "Usability": usabilityInput,
+                "Zcode": ZcodeField,
+                "StorageLocation_LocationID": locationIdField
+              }
+            let oBindListSPM = oModel.bindList("/Category");
+            oBindListSPM.create(payload);
+            this._oDialogItem.close();
+            this.getView().getModel().refresh();
+            setTimeout (() =>{
+            sap.m.MessageToast.show("Data added successfully");
             }, 1000);
             oTable.removeSelections();  
         },
@@ -81,6 +103,7 @@ function (Controller,JSONModel,Fragment,MessageBox,MessageToast) {
         },
         
         onUpdate: async function () {
+            debugger;
             var oView = this.getView();
             var oTable = this.byId("materialStatusTable");
             var oModel = oView.getModel();
@@ -159,9 +182,8 @@ function (Controller,JSONModel,Fragment,MessageBox,MessageToast) {
               });
             });
         },
-
-        
-        
+    
+ 
   
     });
 });
