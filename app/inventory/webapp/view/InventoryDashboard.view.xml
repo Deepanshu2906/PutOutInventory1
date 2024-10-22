@@ -4,11 +4,11 @@
     xmlns:l="sap.ui.layout"
     xmlns:form="sap.ui.layout.form"
     xmlns:core="sap.ui.core"
-
     displayBlock="true">
+    
     <Page id="DashboardPage" title="Dashboard" titleAlignment="Center">
         <l:VerticalLayout  width="100%" >
-             <l:BlockLayout background="Dashboard" >
+            <l:BlockLayout background="Dashboard" >
                 <l:BlockLayoutRow >
                     <l:BlockLayoutCell width="90%">
                         <HBox class="flexBox">
@@ -23,17 +23,17 @@
                             </VBox>
                             <VBox> 
                                 <Label  text="Category"/>
-                                <Select id="categoryFilter"  class="filterData" width="150px" forceSelection="false">
-                                    <core:Item key="cat1" text="Category 1" />
-                                    <core:Item key="cat2" text="Category 2" />
-                                    <core:Item key="cat3" text="Category 3" />
+                                <Select id="categoryFilter"  class="filterData" width="150px"  forceSelection="false">
+                                    <core:Item key="Category A" text="Category A" />
+                                    <core:Item key="Category B" text="Category B" />
+                                    <core:Item key="Category C" text="Category C" />
                                 </Select>
                             </VBox> 
                             <VBox>
                                 <Label  text="Usability"/>
                                 <Select id="usabilityFilter"  class="filterData" width="150px" forceSelection="false">
-                                    <core:Item key="usable" text="Usable" />
-                                    <core:Item key="notUsable" text="Not Usable" />
+                                    <core:Item key="Usable" text="Usable" />
+                                    <core:Item key="Not Usable" text="Not Usable" />
                                 </Select>
                             </VBox> 
                             <VBox>
@@ -51,69 +51,62 @@
                             </HBox>
                         </HBox>
                     </l:BlockLayoutCell>
-                   
                 </l:BlockLayoutRow>
                 <l:BlockLayoutRow >
                      <l:BlockLayoutCell width="90%">
-                        <Table id="inventoryDataTable" width="100%" items="{invData>/inventory}" class="dashboardTable">
-                            <columns>
-                                <Column  width="20%">
-                                    <Text
-                                        id="_IDGenText11"
-                                        text="Material Req No"
-                                       
-                                    />
-
+                        <Table id="inventoryDataTable" width="100%" items="{/rqMaterial}" class="dashboardTable">
+                            <columns >
+                                <Column mergeDuplicates="true" width="10%">
+                                    <Text text="Material Req No" />
                                 </Column>
-                                <Column id="_IDGenColumn2"  width="20%">
-                                    <Text
-                                        id="_IDGenText2"
-                                        text=" Created By"
-                                    />
+                                <Column>
+                                    <Text text="Material Code" />
                                 </Column>
-                                <Column id="_IDGeColumn3"  width="20%">
-                                    <Text
-                                        id="_IDGeText3"
-                                        text=" Created On"
-                                    />
+                                <Column width="13%">
+                                    <Text text="Description" />
                                 </Column>
-                                 <Column id="_IDGeColumn4"  width="20%">
-                                    <Text
-                                        id="_IDGeText4"
-                                        text="View Details"
-                                    />
+                                <Column>
+                                    <Text text="Category" />
                                 </Column>
-                                <Column  width="20%">
-                                    <Text
-                                        text=" Export Details"
-                                    />
+                                <Column>
+                                    <Text text="Quantity" />
+                                </Column>
+                                <Column>
+                                    <Text text="Status" />
+                                </Column>
+                                <Column>
+                                    <Text text=" Created By"/>
+                                </Column>
+                                <Column>
+                                    <Text text=" Created On"/>
+                                </Column>
+                                 <Column width="8%">
+                                    <Text text="View Details"/>
+                                </Column>
+                                <Column>
+                                    <Text text=" Export Details" />
                                 </Column>
                             </columns>
                             <items>
                                 <ColumnListItem id="_IDGenColumnListItem1">
                                     <cells>
-                                    
-                                        <Text text="{invData>MaterialReqNo}"/>
-                                        <Text text="{invData>CreatedBy}" />
-                                        <Text text="{invData>CreatedOn}" />
-                                        <Button text="View"  type="Accept" press="onViewPress"/>
+                                        <Text text="{reqNo}"/>
+                                        <Text text="{MaterialCode}"/>
+                                        <Text text="{Description}"/>
+                                        <Text text="{Category}"/>
+                                        <Text text="{Quantity}"/>
+                                        <Text text="{Status}"/>
+                                        <Text text="{createdBy}" />
+                                        <Text text="{createdAt}" />
+                                        <Button text="View"  type="Accept" press="onViewPress" />
                                         <Button icon="sap-icon://download" text="Download" type="Neutral" press="onDownloadPress"/>
-
-
                                     </cells>
                                 </ColumnListItem>
                             </items>
                         </Table>
                     </l:BlockLayoutCell>
                 </l:BlockLayoutRow>
-
-                
-
-             </l:BlockLayout>
+            </l:BlockLayout>
         </l:VerticalLayout>
-       
-      
-
-
     </Page>
 </mvc:View>
