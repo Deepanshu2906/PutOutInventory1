@@ -38,9 +38,15 @@ function (Controller, JSONModel, MessageToast,Fragment,Spreadsheet) {
             }
 
             if (oDate) {
-                var oDateFormat = sap.ui.core.format.DateFormat.getDateInstance({pattern: "yyyy-MM-dd"});
-                var sFormattedDate = oDateFormat.format(oDate);
-                aFilters.push(new sap.ui.model.Filter("createdAt", sap.ui.model.FilterOperator.Contains, sFormattedDate));
+                var oStartDate = new Date(oDate.setHours(0, 0, 0, 0));
+                var oEndDate = new Date(oDate.setHours(23, 59, 59, 999));
+       
+                aFilters.push(new sap.ui.model.Filter({
+                    path: "createdAt",
+                    operator: sap.ui.model.FilterOperator.BT,
+                    value1: oStartDate.toISOString(),
+                    value2: oEndDate.toISOString()
+                }));
             }
 
             oBinding.filter(aFilters);

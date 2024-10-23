@@ -218,20 +218,16 @@ module.exports = async (srv) => {
         return cds.run(SELECT.from('mydb.Material').where({ MaterialCode: combinedMaterialCode }));
     });
 
-    // return cds.run(SELECT.from('mydb.Material'));
+   
 
 
-    // srv.on('READ', 'StorageLocation', req => {
-    //     return cds.run(SELECT.from('mydb.StorageLocation'));
+    // srv.on('CREATE', 'StorageLocation', async req => {
+    //     console.log("loc : ", req.data);
+    //     await cds.run(INSERT.into('mydb.StorageLocation').entries(req.data));
+    //     return
     // });
 
-    srv.on('CREATE', 'StorageLocation', req => {
-        return cds.run(INSERT.into('mydb.StorageLocation').entries(req.data));
-    });
-
-    // srv.on('UPDATE', 'StorageLocation',async  req => {
-    //     await cds.run(UPDATE('mydb.StorageLocation').set(req.data).where({ LocationID: req.data.LocationID }));
-    // });
+   
 
 
 

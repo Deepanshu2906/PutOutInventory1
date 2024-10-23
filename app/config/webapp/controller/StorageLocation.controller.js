@@ -31,12 +31,10 @@ function (Controller,JSONModel,Fragment,MessageBox,MessageToast) {
         handleValueHelpClose1: function () {
             this._oDialogItem.close();
         },
-
-       
-        onSave :function(){
+        onSave: function () {
             var oView = this.getView();
             var oTable = this.byId("slocTable");
-            
+
             var slocData = this.getView().getModel("slocModel").getData();
 
             let slocId = slocData.LocationID;
@@ -46,26 +44,37 @@ function (Controller,JSONModel,Fragment,MessageBox,MessageToast) {
                 LocationName: slocName
             }
             let oModel = this.getView().getModel();
-         
+
             let oBindListSPM = oModel.bindList("/StorageLocation");
             oBindListSPM.create(payload, true);
-            oBindListSPM.attachCreateCompleted( p => {
-                console.log(p);
+            oBindListSPM.attachCreateCompleted(p => {
+                // console.log(p);
                 let p1 = p.getParameters();
-                if( p1.success){
-                    console.log(p1);
-                }
+                if (p1.success) {
+                    // console.log(p1);
+                    
+                        sap.m.MessageToast.show("Storage Location added successfully");
                 
+
+                    oView.getModel().refresh();
+                    oTable.getBinding("items").refresh();
+                } else {
+                    let oContext = p1.context;
+                    let msgArr = oContext.oModel.mMessages[""];
+                    // console.log(msgArr);
+                    sap.m.MessageBox.error(msgArr[msgArr.length - 1].message);
+                }
+
             })
-             
             this._oDialogItem.close();
-            this.getView().getModel().refresh(true);
-            oTable.getBinding("items").refresh(true);
-            setTimeout (() =>{
-            sap.m.MessageToast.show("Storage Location added Successfully");
-            }, 1000);
-            oTable.removeSelections();  
+
+
+
+            oTable.removeSelections();
         },
+
+       
+       
 
         onEdit: function () {
             var oTable = this.byId("slocTable");
@@ -95,8 +104,8 @@ function (Controller,JSONModel,Fragment,MessageBox,MessageToast) {
             var oModel = oView.getModel();
             var oUpdateData = oView.getModel("slocModel").getData();
         
-            let StatusCode = oUpdateData.StatusCode;
-            let StatusDescription = oUpdateData.Description;
+            let slocId = oUpdateData.LocationID;
+            let slocName = oUpdateData.LocationName;
 
             var aSelectedItems = oTable.getSelectedItems();
 
@@ -110,8 +119,8 @@ function (Controller,JSONModel,Fragment,MessageBox,MessageToast) {
         
             let oModel2 = this.getOwnerComponent().getModel();
 
-            if (oContext.getProperty("LocationID") === StatusCode) {
-                oContext.setProperty("LocationName", StatusDescription);
+            if (oContext.getProperty("LocationID") === slocId) {
+                oContext.setProperty("LocationName", slocName);
                 try {
                     await oModel2.submitBatch("update");
                     sap.m.MessageToast.show("Item updated successfully.");

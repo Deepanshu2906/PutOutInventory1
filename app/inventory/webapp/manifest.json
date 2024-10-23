@@ -110,6 +110,20 @@
           "target": [
             "TargetInventoryDashboard"
           ]
+        },
+        {
+          "name": "RouteWarehouseMain",
+          "pattern": "SecurityGateIn",
+          "target": [
+            "TargetRouteSecurityGateIn"
+          ]
+        },
+        {
+          "name": "RouteGateMaterial",
+          "pattern": "gateMaterial",
+          "target": [
+            "TargetRouteGateMaterial"
+          ]
         }
        
       ],
@@ -134,6 +148,20 @@
           "clearControlAggregation": false,
           "viewId": "InventoryDashboard",
           "viewName": "InventoryDashboard"
+        },
+        "TargetRouteSecurityGateIn": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "SecurityGateIn",
+          "viewName": "SecurityGateIn"
+        },
+        "TargetRouteGateMaterial": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "SecurityGateInMaterial",
+          "viewName": "SecurityGateInMaterial"
         }
       }
     },

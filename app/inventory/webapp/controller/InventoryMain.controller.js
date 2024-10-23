@@ -14,7 +14,7 @@ sap.ui.define(
         },
         onSecurityGateIn:function(){
             const oRouter = this.getOwnerComponent().getRouter();
-            oRouter.navTo("RouteSecurityGateIn");
+            oRouter.navTo("RouteWarehouseMain");
         },
         onInspection: function(){
             const oRouter = this.getOwnerComponent().getRouter();

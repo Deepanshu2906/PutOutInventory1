@@ -1,6 +1,6 @@
 ### GET
 
-GET http://localhost:4004/odata/v4/inventory/Material_Status
+GET http://localhost:4004/odata/v4/inventory/Material
 
 ### create
 POST http://localhost:4004/odata/v4/inventory/Material_Status

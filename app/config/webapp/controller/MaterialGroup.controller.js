@@ -49,9 +49,10 @@ function (Controller,JSONModel,Fragment,MessageBox,MessageToast) {
             this.getView().getModel().refresh();
             setTimeout (() =>{
             sap.m.MessageToast.show("Data added successfully");
+
+            oTable.removeSelections();  
             }, 1000);
             
-            oTable.removeSelections();  
         },
 
         _onEditMaterialDialog: function () {
