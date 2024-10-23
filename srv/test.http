@@ -1,5 +1,5 @@
 ### GET
-GET http://localhost:4004/odata/v4/inventory/Material_Status
+DELETE  http://localhost:4004/odata/v4/inventory/serviceRequest/40001
 
 ###
 GET http://localhost:4004/odata/v4/inventory/StorageLocation?$filter=LocationID eq 'LOC02'
@@ -14,15 +14,42 @@ Content-Type: application/json
   "Description":"testing10"
 }
 ### GET
-GET http://localhost:4004/odata/v4/inventory/StorageLocation
-### 
-PUT http://localhost:4004/odata/v4/inventory/StorageLocation/LOC03
+GET http://localhost:4004/odata/v4/inventory/rqSubMaterial?$filter=reqNo eq '40002'
+
+###
+GET http://localhost:4004/odata/v4/inventory/rqMaterial?$filter=reqNo eq '40001'
+
+###
+PUT http://localhost:4004/odata/v4/inventory/rqMaterial(reqNo=40001)
 Content-Type: application/json
 
 {
-  "LocationID":"LOC03",
-  "LocationName":"testin"
+      "Status"	
 }
+### 
+PUT http://localhost:4004/odata/v4/inventory/rqMaterial(reqNo=40001,MaterialCode='MAT01')
+Content-Type: application/json
+
+{
+      "Category": "B",
+      "Description": "pipes and bolts",
+      "Quantity": 180,
+      "Remarks": "testing"
+}
+
+###
+POST http://localhost:4004/odata/v4/inventory/rqSubMaterial
+Content-Type: application/json
+
+{
+          "Category": "D",
+          "Description": "Iron Bolt",
+          "MaterialCode": "SUB003",
+          "Quantity": 100,
+          "reqNo"  : 40001,
+          "Parent_MaterialCode": "MAT01"
+}
+
 
 ### create
 POST http://localhost:4004/odata/v4/inventory/serviceRequest

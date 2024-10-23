@@ -22,32 +22,55 @@ entity Subcomponent {
     Quantity         : Integer;
 }
 entity serviceRequest : managed {
-
     key reqNo : Integer;
-    Materials : array of rqMaterial;
+    Materials : Composition of many rqMaterial on Materials.reqNo = $self.reqNo; 
     createdBy : String(100) @cds.on.insert : $user.id; 
     reqStatus : String(20);
-
 }
-type  rqMaterial {
-    reqNo            : Integer;
+
+entity rqMaterial : managed {
+    key reqNo        : Integer;
+    key MaterialCode : String(20);
     Category         : String(1);
-    MaterialCode     : String(20);
     Description      : String(255);
-    Status           : String(20);
-    Remarks          : String(255);
+    MatStatus           : String(20);
+    MatRemarks          : String(255);                                                                                                                                                                  
     Quantity         : Integer;
-    SubcomponentList :  array of rqSubMaterial;
+    SubcomponentList : Composition of many rqSubMaterial on SubcomponentList.Parent_MaterialCode = $self.MaterialCode;
+}entity rqSubMaterial : managed {
+    key Parent_MaterialCode : String(20);
+    key MaterialCode        : String(10);
+    key reqNo               : Integer;
+    Category                : String(1);
+    Description             : String(20);
+    Quantity                : Integer;
 }
-type rqSubMaterial {
-    Category            : String(1);
-    Description         : String(20);
-    MaterialCode        : String(10);
+
+entity splitMaterilalTable {
+    key reqNo           : Integer;
+    key MaterialCode    : String(20);
+    key Status          : String;
+    Remarks             : String;
     Quantity            : Integer;
-    Parent_MaterialCode : String(20);
-
-
 }
+entity splitSubMaterialTable {
+    key reqNo : Integer;
+    key MaterialCode : String;
+    key Parent_MaterialCode : String;
+    key Status : String;
+    Quantity : Integer;
+    Remarks : String
+}
+
+
+// entity serviceRequest : managed {
+
+//     key reqNo : Integer;
+//     Materials : array of rqMaterial;
+//     createdBy : String(100) @cds.on.insert : $user.id; 
+//     reqStatus : String(20);
+
+// }
 // type  rqMaterial {
 //     reqNo            : Integer;
 //     Category         : String(1);
@@ -67,6 +90,8 @@ type rqSubMaterial {
 
 
 // }
+
+
 entity Category  {
     key ID               : String(10);                      
     Type                 : String(1);  

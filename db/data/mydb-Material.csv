@@ -1,1 +1,4 @@
 MaterialCode,Category,Description,Status,Quantity
+MAT01,B,STEEL BRASS,OPEN,200
+MAT02,A,PIPES,PENDING,150
+MAT03,C,RODS,OPEN,120
