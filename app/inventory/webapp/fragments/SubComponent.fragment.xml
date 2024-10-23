@@ -10,8 +10,11 @@
         initialFocus="none"
         afterClose="handleValueHelpClose">
         
-        <Table id="subComponentTable" class="dashboardTable" items="{subCompData>/subComponents}">
+        <Table id="subComponentTable" class="dashboardTable" items="{/rqSubMaterial}">
             <columns>
+                <Column>
+                    <Text text="Parent Material Code" />
+                </Column>
                 <Column>
                     <Text text="Material Code" />
                 </Column>
@@ -28,10 +31,11 @@
             </columns>
             <items>
                 <ColumnListItem>
-                   <Text text="{subCompData>SubMaterialCode}"></Text>
-                   <Text text="{subCompData>Description}"></Text>
-                   <Text text="{subCompData>Category}"></Text>
-                   <Text text="{subCompData>Quantity}"></Text>
+                   <Text text="{Parent_MaterialCode}"></Text>
+                   <Text text="{MaterialCode}"></Text>
+                   <Text text="{Description}"></Text>
+                   <Text text="{Category}"></Text>
+                   <Text text="{Quantity}"></Text>
                 </ColumnListItem>
             </items>
         </Table>

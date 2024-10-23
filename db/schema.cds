@@ -44,7 +44,6 @@ entity rqSubMaterial : managed {
     key reqNo               : Integer;
     Category                : String(1);
     Description             : String(20);
-
     Quantity                : Integer;
 }
 
