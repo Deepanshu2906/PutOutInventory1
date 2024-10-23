@@ -5,6 +5,7 @@ sap.ui.define([
     "sap/m/MessageBox",
     "sap/m/MessageToast",
 ],
+
     function (Controller, JSONModel, Fragment, MessageBox, MessageToast) {
         "use strict";
         let oBusyDialog;
@@ -112,6 +113,7 @@ sap.ui.define([
                 if (aSelectedItems.length !== 1) {
                     sap.m.MessageToast.show("Please select one item to update.");
                     return;
+
                 }
 
                 var oSelectedItem = aSelectedItems[0];
@@ -162,6 +164,7 @@ sap.ui.define([
                             }
                         }
                     }
+
                     );
                 });
             },
@@ -183,3 +186,4 @@ sap.ui.define([
 
         });
     });
+

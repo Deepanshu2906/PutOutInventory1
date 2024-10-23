@@ -47,7 +47,6 @@ entity rqSubMaterial : managed {
     Description             : String(20);
     MatStatus               : String;
     MatRemarks              :String;
-
     Quantity                : Integer;
 }
 
