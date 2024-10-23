@@ -37,6 +37,7 @@ entity rqMaterial : managed {
     MatRemarks          : String(255);                                                                                                                                                                  
     Quantity         : Integer;
     SubcomponentList : Composition of many rqSubMaterial on SubcomponentList.Parent_MaterialCode = $self.MaterialCode;
+
 }
 entity rqSubMaterial : managed {
     
@@ -58,6 +59,7 @@ entity splitMaterilalTable {
     MatRemarks             : String;
 }
 
+
 entity splitSubMaterialTable {
     key reqNo : Integer;
     key MaterialCode : String;
@@ -66,7 +68,6 @@ entity splitSubMaterialTable {
     Quantity : Integer;
     MatRemarks : String
 }
-
 
 entity Category  {
     key ID               : String(10);                      
