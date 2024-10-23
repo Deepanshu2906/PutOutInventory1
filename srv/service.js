@@ -79,8 +79,8 @@ module.exports = async (srv) => {
                     MaterialCode: material.MaterialCode,
                     Category: material.Category,
                     Description: material.Description,
-                    Status: material.Status,
-                    Remarks: material.Remarks,
+                    MatStatus: material.Status,
+                    MatRemarks: material.Remarks,
                     Quantity: parseInt(material.Quantity)
                 }));
 

@@ -33,8 +33,8 @@ entity rqMaterial : managed {
     key MaterialCode : String(20);
     Category         : String(1);
     Description      : String(255);
-    MatStatus           : String(20);
-    MatRemarks          : String(255);                                                                                                                                                                  
+    MatStatus        : String(20);
+    MatRemarks       : String(255);                                                                                                                                                                  
     Quantity         : Integer;
     SubcomponentList : Composition of many rqSubMaterial on SubcomponentList.Parent_MaterialCode = $self.MaterialCode;
 }
