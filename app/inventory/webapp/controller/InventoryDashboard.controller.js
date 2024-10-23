@@ -103,23 +103,13 @@ function (Controller, JSONModel, MessageToast,Fragment,Spreadsheet) {
         handleValueHelpClose: function () {
             this._oDialog.close();
         },
-
-        onDownloadPress: function (oEvent) { 
+        
+        onDownloadPress: function (oEvent) {
             var oContext = oEvent.getSource().getBindingContext();
             var oMaterialData = oContext.getObject();
             var sMaterialCode = oMaterialData.MaterialCode;
-
-
-            var aExportData = [{
-                MaterialReqNo: oMaterialData.reqNo,
-                MaterialCode: oMaterialData.MaterialCode,
-                MaterialDescription: oMaterialData.Description,
-                Category: oMaterialData.Category,
-                Status: oMaterialData.Status,
-                CreatedBy: oMaterialData.createdBy,
-                CreatedOn: oMaterialData.createdAt
-            }];
-    
+        
+            var aExportData = [];
 
             var aColumns = [
                 { label: "Material Req No", property: "MaterialReqNo" },
@@ -134,23 +124,43 @@ function (Controller, JSONModel, MessageToast,Fragment,Spreadsheet) {
                 { label: "Sub Category", property: "SubCategory" },
                 { label: "Quantity", property: "Quantity" }
             ];
-        
-            var oSpreadsheet = new sap.ui.export.Spreadsheet({
-                workbook: {
-                    columns: aColumns
-                },
-                dataSource: aExportData,
-                fileName: "Material_Data.xlsx"
-            });
-        
-            oSpreadsheet.build().finally(function () {
-                oSpreadsheet.destroy();
-            });
-        }
-        
 
+            var oListBinding = this.getView().getModel().bindList("/rqSubMaterial", null, null, 
+
+            new sap.ui.model.Filter("Parent_MaterialCode", sap.ui.model.FilterOperator.EQ, sMaterialCode));
         
+            oListBinding.requestContexts().then(function (aContexts) {
+                aContexts.forEach(function (oContext) {
+                    var oSubMaterialData = oContext.getObject();
+                    aExportData.push({
+                        MaterialReqNo: oMaterialData.reqNo,
+                        MaterialCode: oMaterialData.MaterialCode,
+                        MaterialDescription: oMaterialData.Description,
+                        Category: oMaterialData.Category,
+                        Status: oMaterialData.Status,
+                        CreatedBy: oMaterialData.createdBy,
+                        CreatedOn: oMaterialData.createdAt,
+                        SubMaterialCode: oSubMaterialData.MaterialCode,
+                        SubDescription: oSubMaterialData.Description,
+                        SubCategory: oSubMaterialData.Category,
+                        Quantity: oSubMaterialData.Quantity
+                    });
+                });
+
+                var oSpreadsheet = new sap.ui.export.Spreadsheet({
+                    workbook: {
+                        columns: aColumns
+                    },
+                    dataSource: aExportData,
+                    fileName: "Material_Data.xlsx"
+                });
         
- 
+                oSpreadsheet.build().finally(function () {
+                    oSpreadsheet.destroy();
+                });
+            }).catch(function (oError) {
+                sap.m.MessageToast.show("Error fetching subcomponents.");
+            });
+        },
     });
 });
