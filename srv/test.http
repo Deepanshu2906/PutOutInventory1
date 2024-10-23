@@ -1,8 +1,22 @@
 ### GET
+
 DELETE  http://localhost:4004/odata/v4/inventory/serviceRequest/40001
 
+
+GET http://localhost:4004/odata/v4/inventory/Material_Status
+
+
+### create
+POST http://localhost:4004/odata/v4/inventory/Material_Status
+Content-Type: application/json
+
+{
+  "StatusCode":"ddd",
+  "Description":"testing10"
+}
+
 ###
-GET http://localhost:4004/odata/v4/inventory/StorageLocation?$filter=LocationID eq 'LOC02'
+GET http://localhost:4004/odata/v4/inventory/StorageLocation?$filter=LocationID eq "LOC02"
 
 
 ### POST STATUS
@@ -14,6 +28,7 @@ Content-Type: application/json
   "Description":"testing10"
 }
 ### GET
+
 GET http://localhost:4004/odata/v4/inventory/rqSubMaterial?$filter=reqNo eq '40002'
 
 ###
@@ -26,6 +41,10 @@ Content-Type: application/json
 {
       "Status"	
 }
+
+# GET http://localhost:4004/odata/v4/inventory/$metadata
+GET http://localhost:4004/odata/v4/inventory/serviceRequest?$expand=Materials
+
 ### 
 PUT http://localhost:4004/odata/v4/inventory/rqMaterial(reqNo=40001,MaterialCode='MAT01')
 Content-Type: application/json

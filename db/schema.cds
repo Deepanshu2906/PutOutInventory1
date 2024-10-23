@@ -17,7 +17,7 @@ entity Subcomponent {
     key ID           : Integer;  
     Category         : String(1);
     Description      : String(20);
-    MaterialCode     : String(10);
+    MaterialCode     : String(20);
     Parent           : Association to Material;
     Quantity         : Integer;
 }
@@ -37,60 +37,37 @@ entity rqMaterial : managed {
     MatRemarks          : String(255);                                                                                                                                                                  
     Quantity         : Integer;
     SubcomponentList : Composition of many rqSubMaterial on SubcomponentList.Parent_MaterialCode = $self.MaterialCode;
-}entity rqSubMaterial : managed {
+
+}
+entity rqSubMaterial : managed {
+    
     key Parent_MaterialCode : String(20);
-    key MaterialCode        : String(10);
+    key MaterialCode        : String(20);
     key reqNo               : Integer;
     Category                : String(1);
     Description             : String(20);
+    MatStatus               : String;
+    MatRemarks              :String;
     Quantity                : Integer;
 }
 
 entity splitMaterilalTable {
     key reqNo           : Integer;
     key MaterialCode    : String(20);
-    key Status          : String;
-    Remarks             : String;
+    key MatStatus          : String;
     Quantity            : Integer;
+    MatRemarks             : String;
 }
+
+
 entity splitSubMaterialTable {
     key reqNo : Integer;
     key MaterialCode : String;
     key Parent_MaterialCode : String;
-    key Status : String;
+    key MatStatus : String;
     Quantity : Integer;
-    Remarks : String
+    MatRemarks : String
 }
-
-
-// entity serviceRequest : managed {
-
-//     key reqNo : Integer;
-//     Materials : array of rqMaterial;
-//     createdBy : String(100) @cds.on.insert : $user.id; 
-//     reqStatus : String(20);
-
-// }
-// type  rqMaterial {
-//     reqNo            : Integer;
-//     Category         : String(1);
-//     MaterialCode     : String(20);
-//     Description      : String(255);
-//     Status           : String(20);
-//     Remarks          : String(255);
-//     Quantity         : Integer;
-//     SubcomponentList :  array of rqSubMaterial;
-// }
-// type rqSubMaterial {
-//     Category            : String(1);
-//     Description         : String(20);
-//     MaterialCode        : String(10);
-//     Quantity            : Integer;
-//     Parent_MaterialCode : String(20);
-
-
-// }
-
 
 entity Category  {
     key ID               : String(10);                      

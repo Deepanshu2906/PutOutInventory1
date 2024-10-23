@@ -3,41 +3,77 @@ const cds = require('@sap/cds');
 module.exports = async (srv) => {
 
     // READ operations for Material_Status, Category, and StorageLocation entities
-    srv.on('READ', 'Material_Status', req => {
-        return cds.run(SELECT.from('mydb.Material_Status'));
-    });
-    srv.on('CREATE', 'Material_Status', req => {
-        return cds.run(INSERT.into('mydb.Material_Status').entries(req.data));
-    });
- 
-    srv.on('UPDATE', 'Material_Status', async req => {
-        console.log("bfdsbfs :", req.data);
-        await cds.run(UPDATE('mydb.Material_Status').set(req.data).where({ StatusCode : req.data.StatusCode }));
+    // srv.on('READ', 'Material_Status', req => {
+    //     return cds.run(SELECT.from('mydb.Material_Status'));
+    // });
+    srv.on('CREATE', 'Material_Status', async req => {
+        try {
+            console.log("payload ", req.data);
+
+            // Check if the StatusCode already exists
+            const exists = await cds.run(SELECT.one.from('mydb.Material_Status').where({ StatusCode: req.data.StatusCode }));
+
+            if (exists) {
+                // If the entry exists, throw an error
+                req.error(409, `Material Status with StatusCode '${req.data.StatusCode}' already exists`);
+            } else {
+                // If it doesn't exist, insert the new entry
+                await cds.run(INSERT.into('mydb.Material_Status').entries(req.data));
+                return cds.run(SELECT.one.from('mydb.Material_Status').where({ StatusCode: req.data.StatusCode }));
+            }
+        } catch (error) {
+            // Handle unexpected errors
+            return req.error(500, `Failed to create Material Status: ${error.message}`);
+        }
     });
 
-    srv.on('READ', 'Category', req => {
-        return cds.run(SELECT.from('mydb.Category'));
+
+    srv.on('UPDATE', 'Material_Status', async req => {
+        console.log("update status:", req.data);
+        await cds.run(UPDATE('mydb.Material_Status').set(req.data).where({ StatusCode: req.data.StatusCode }));
     });
+
+    // srv.on('READ', 'Category', req => {
+    //     return cds.run(SELECT.from('mydb.Category'));
+    // });
+
+    srv.on('CREATE', 'Category', async (req) => {
+        const data = req.data;
+        const lastCategory = await SELECT.one
+            .from('mydb.Category').where({ ID: { like: 'CAT%' } }).orderBy('ID desc');
+        let newID = 'CAT01';
+        if (lastCategory && lastCategory.ID) {
+            const lastNumber = parseInt(lastCategory.ID.replace('CAT', ''), 10);
+            const nextNumber = lastNumber + 1;
+            newID = `CAT${nextNumber.toString().padStart(2, '0')}`;
+        }
+        data.ID = newID;
+         await INSERT.into('mydb.Category').entries(data);
+         return cds.run(SELECT.from('mydb.Category').where( {ID : data.ID}) )
+    });
+
+    
     srv.on('CREATE', 'serviceRequest', async (req) => {
         const tx = cds.transaction(req);
-    
+
         // Fetch the maximum reqNo in the table
         const lastRequest = await tx.run(SELECT.one.from('mydb.serviceRequest').columns('max(reqNo) as maxReqNo'));
-    
+
+
         // Determine the next reqNo, start from 40001 if no entries exist
         const nextReqNo = lastRequest.maxReqNo ? lastRequest.maxReqNo + 1 : 40001;
-    
+
         // Assign the generated reqNo to the incoming request data
         req.data.reqNo = nextReqNo;
-    
-    
-    
+
+
         // Check if Materials array exists and process it
         if (req.data.Materials && Array.isArray(req.data.Materials)) {
             // Loop through each material to assign reqNo and insert into rqMaterial
             for (let material of req.data.Materials) {
                 material.reqNo = nextReqNo; // Assign reqNo to each material
-                
+
+
                 // Insert into rqMaterial table
                 await tx.run(INSERT.into('mydb.rqMaterial').entries({
                     reqNo: material.reqNo,
@@ -48,32 +84,34 @@ module.exports = async (srv) => {
                     Remarks: material.Remarks,
                     Quantity: parseInt(material.Quantity)
                 }));
-    
+
                 // Check if SubcomponentList exists for the material and process it
                 if (material.SubcomponentList && Array.isArray(material.SubcomponentList)) {
                     for (let subMaterial of material.SubcomponentList) {
                         // Assign the parent MaterialCode and insert into rqSubMaterial
                         subMaterial.Parent_MaterialCode = material.MaterialCode;
-    
+
                         await tx.run(INSERT.into('mydb.rqSubMaterial').entries({
                             Parent_MaterialCode: subMaterial.Parent_MaterialCode,
                             MaterialCode: subMaterial.MaterialCode,
                             Category: subMaterial.Category,
                             Description: subMaterial.Description,
                             Quantity: parseInt(subMaterial.Quantity),
-                            reqNo : material.reqNo
+
+                            reqNo: material.reqNo
                         }));
                     }
                 }
             }
         }
-            // First insert the main serviceRequest
+        // First insert the main serviceRequest
         await tx.run(INSERT.into('mydb.serviceRequest').entries({
             reqNo: nextReqNo,
             createdBy: req.data.createdBy,
-            reqStatus: req.data.reqStatus
+            reqStatus: req.data.reqStatus,
+            Materials: []
         }));
-    
+
         // Return the created serviceRequest with expanded Materials and SubcomponentList
         return cds.run(SELECT.from('mydb.serviceRequest')
             .where({ reqNo: nextReqNo })
@@ -82,7 +120,32 @@ module.exports = async (srv) => {
             // })
         );
     });
-    
+
+
+    // srv.on('CREATE', 'serviceRequest', async (req) => {
+    //     const tx = cds.transaction(req);
+
+    //     // Fetch the maximum reqNo in the table
+    //     const lastRequest = await tx.run(SELECT.one.from('mydb.serviceRequest').columns('max(reqNo) as maxReqNo'));
+
+    //     // Determine the next reqNo, start from 40001 if no entries exist
+    //     const nextReqNo = lastRequest.maxReqNo ? lastRequest.maxReqNo + 1 : 40001;
+
+    //     // Assign the generated reqNo to the incoming request data
+    //     req.data.reqNo = nextReqNo;
+
+    //     // Proceed with the creation
+    //      // If there is a Materials array in the request, add reqNo to each material object
+    //     if (req.data.Materials && Array.isArray(req.data.Materials)) {
+    //     req.data.Materials.forEach(material => {
+    //         material.reqNo = nextReqNo; // Assign reqNo to each material
+    //     });
+    //     }
+
+    //     await tx.run(INSERT.into('mydb.serviceRequest').entries(req.data));
+    //     return cds.run(SELECT.from('mydb.serviceRequest').where({ reqNo: nextReqNo }));
+    // });
+
 
     // srv.on('CREATE', 'serviceRequest', async (req) => {
     //     const tx = cds.transaction(req);
@@ -122,17 +185,17 @@ module.exports = async (srv) => {
 
         // Determine the next material code based on the existing data
         let nextMaterialCode = `${prefix}001`; // Default value if no materials exist for this category
-    
+
         if (materials.length > 0) {
             const lastMaterial = materials[0].MaterialCode;
-            
+
             // Split the MaterialCode by hyphen to separate parent from subcomponent code
             const [parentCode] = lastMaterial.split('-');
-    
+
             // Extract the prefix and numeric part dynamically from the parent code
             const lastPrefix = parentCode.substring(0, 2); // First two characters of the parent MaterialCode
             const lastNumber = parseInt(parentCode.substring(2), 10); // Numeric part of the parent MaterialCode
-    
+
             // Generate the next parent MaterialCode by incrementing the numeric part
             nextMaterialCode = `${lastPrefix}${String(lastNumber + 1).padStart(3, '0')}`; // Increment the number
         }
@@ -151,7 +214,7 @@ module.exports = async (srv) => {
             Quantity,
             Status
         };
-        console.log("new material ",newMaterial);
+        console.log("new material ", newMaterial);
 
         // Insert the new parent material into the Material table
         await cds.run(INSERT.into('mydb.Material').entries(newMaterial));
@@ -165,7 +228,7 @@ module.exports = async (srv) => {
                 const result = await cds.run(SELECT.one.from('mydb.Subcomponent').columns('max(ID) as maxID'));
                 const maxID = result?.maxID || 1; // If no records, default to 0
                 const newSubcomponent = {
-                    ID : maxID +1 ,
+                    ID: maxID + 1,
                     Parent_MaterialCode: combinedMaterialCode, // Parent's combined MaterialCode
                     Category: subcomponent.Category,
                     Description: subcomponent.Description,
@@ -185,9 +248,9 @@ module.exports = async (srv) => {
     // return cds.run(SELECT.from('mydb.Material'));
 
 
-    srv.on('READ', 'StorageLocation', req => {
-        return cds.run(SELECT.from('mydb.StorageLocation'));
-    });
+    // srv.on('READ', 'StorageLocation', req => {
+    //     return cds.run(SELECT.from('mydb.StorageLocation'));
+    // });
 
     srv.on('CREATE', 'StorageLocation', req => {
         return cds.run(INSERT.into('mydb.StorageLocation').entries(req.data));
@@ -197,10 +260,12 @@ module.exports = async (srv) => {
     //     await cds.run(UPDATE('mydb.StorageLocation').set(req.data).where({ LocationID: req.data.LocationID }));
     // });
 
-    // READ operation for serviceRequest
-    srv.on('READ', 'serviceRequest', req => {
-        return cds.run(SELECT.from('mydb.serviceRequest'));
-    });
+
 
    
 };
+
+
+
+};
+

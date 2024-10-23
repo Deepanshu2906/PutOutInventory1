@@ -1,4 +1,9 @@
 MaterialCode,Category,Description,Status,Quantity
-MAT01,B,STEEL BRASS,OPEN,200
-MAT02,A,PIPES,PENDING,150
-MAT03,C,RODS,OPEN,120
+BL001,A,Bolts,Active,100
+BL002,A,Sub Bolts,Active,100
+FI001,B,Brass Nuts,Inactive,50
+FI002,B,Sub Brass Nuts,Inactive,100
+SC001,C,Steel Pipes,Active,200
+SC002,C,Sub Steel Pipes,Active,230
+SC003,C,Steel Pipes Joint assembly with with bolts and brass fittng,Active,2
+

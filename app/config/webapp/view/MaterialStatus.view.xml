@@ -3,15 +3,15 @@
     xmlns:l="sap.ui.layout"
     xmlns:form="sap.ui.layout.form"
     xmlns="sap.m">
-    <Page id="page" title="Material Status">
-         <l:VerticalLayout id="_IDGenVerticalLayout1" width="100%" >
+    <Page id="page1" title="Material Status">
+         <l:VerticalLayout id="_IDGenVerticalLayout111" width="100%" >
             <l:BlockLayout
-                id="_IDGenBlockLayout1"
+                id="_IDGenBlockLayout111"
                 background="Dashboard" 
             >
-            <l:BlockLayoutRow id="_IDGenBlockLayoutRow1">
+            <l:BlockLayoutRow id="_IDGenBlockLayoutRow111">
             <l:BlockLayoutCell
-                id="_IDGenBlockLayoutCell1"
+                id="_IDGenBlockLayoutCell111"
                 width="90%"
             >
 

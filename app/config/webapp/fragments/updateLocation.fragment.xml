@@ -2,18 +2,18 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core">
     <Dialog
-        id="updateMaterialStatusDialog1"
+        id="updateMaterialStatusDialog2"
         class="sapUiContentPadding"
         contentWidth="20%"
         contentHeight="25%"
-        title="Update Material Status"
+        title="Update Storage Location"
         afterClose="handleValueHelpClose2">
 
         <VBox>
             <Label text="Status Code"></Label>
-            <Input id="sfCode1" value="{editMaterialStatusModel>/StatusCode}" editable="false" ></Input>
+            <Input id="sloc2" value="{slocModel>/LocationID}" editable="false" ></Input>
             <Label text="Staus Description"></Label>
-            <Input id="sfDesc1" value="{editMaterialStatusModel>/Description}"></Input>
+            <Input id="slocName2" value="{slocModel>/LocationName}"></Input>
         </VBox>
 
         <beginButton>
