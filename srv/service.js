@@ -3,9 +3,9 @@ const cds = require('@sap/cds');
 module.exports = async (srv) => {
 
     // READ operations for Material_Status, Category, and StorageLocation entities
-    srv.on('READ', 'Material_Status', req => {
-        return cds.run(SELECT.from('mydb.Material_Status'));
-    });
+    // srv.on('READ', 'Material_Status', req => {
+    //     return cds.run(SELECT.from('mydb.Material_Status'));
+    // });
     srv.on('CREATE', 'Material_Status', async req => {
         try {
             console.log("payload ", req.data);
@@ -33,9 +33,9 @@ module.exports = async (srv) => {
         await cds.run(UPDATE('mydb.Material_Status').set(req.data).where({ StatusCode: req.data.StatusCode }));
     });
 
-    srv.on('READ', 'Category', req => {
-        return cds.run(SELECT.from('mydb.Category'));
-    });
+    // srv.on('READ', 'Category', req => {
+    //     return cds.run(SELECT.from('mydb.Category'));
+    // });
 
     srv.on('CREATE', 'Category', async (req) => {
         const data = req.data;
@@ -221,9 +221,9 @@ module.exports = async (srv) => {
     // return cds.run(SELECT.from('mydb.Material'));
 
 
-    srv.on('READ', 'StorageLocation', req => {
-        return cds.run(SELECT.from('mydb.StorageLocation'));
-    });
+    // srv.on('READ', 'StorageLocation', req => {
+    //     return cds.run(SELECT.from('mydb.StorageLocation'));
+    // });
 
     srv.on('CREATE', 'StorageLocation', req => {
         return cds.run(INSERT.into('mydb.StorageLocation').entries(req.data));
@@ -234,9 +234,6 @@ module.exports = async (srv) => {
     // });
 
 
-    srv.on('READ', 'serviceRequest', req => {
-        return cds.run(SELECT.from('mydb.serviceRequest'));
-    });
 
 
 

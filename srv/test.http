@@ -25,9 +25,7 @@ Content-Type: application/json
 }
 ### GET
 # GET http://localhost:4004/odata/v4/inventory/$metadata
-GET http://localhost:4004/odata/v4/inventory/serviceRequest/40002?$expand=Materials
-
-
+GET http://localhost:4004/odata/v4/inventory/serviceRequest?$expand=Materials
 
 ### 
 PUT http://localhost:4004/odata/v4/inventory/StorageLocation/LOC03

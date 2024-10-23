@@ -33,35 +33,38 @@ entity rqMaterial : managed {
     key MaterialCode : String(20);
     Category         : String(1);
     Description      : String(255);
-    Status           : String(20);
-    Remarks          : String(255);                                                                                                                                                                  
+    MatStatus           : String(20);
+    MatRemarks          : String(255);                                                                                                                                                                  
     Quantity         : Integer;
     SubcomponentList : Composition of many rqSubMaterial on SubcomponentList.Parent_MaterialCode = $self.MaterialCode;
 }
 entity rqSubMaterial : managed {
+    
     key Parent_MaterialCode : String(20);
     key MaterialCode        : String(20);
     key reqNo               : Integer;
     Category                : String(1);
     Description             : String(20);
+    MatStatus               : String;
+    MatRemarks              :String;
     Quantity                : Integer;
 }
 
 entity splitMaterilalTable {
     key reqNo           : Integer;
     key MaterialCode    : String(20);
-    key Status          : String;
+    key MatStatus          : String;
     Quantity            : Integer;
-    Remarks             : String;
+    MatRemarks             : String;
 }
 
 entity splitSubMaterialTable {
     key reqNo : Integer;
     key MaterialCode : String;
     key Parent_MaterialCode : String;
-    key Status : String;
+    key MatStatus : String;
     Quantity : Integer;
-    Remarks : String
+    MatRemarks : String
 }
 
 

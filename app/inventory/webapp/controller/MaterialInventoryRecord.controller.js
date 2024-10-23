@@ -141,7 +141,6 @@ sap.ui.define([
                     Quantity: "",
                     MaterialCode: "",
                     Description: "",
-                    Status: "",
                     SubcomponentList: []
                 };
             
