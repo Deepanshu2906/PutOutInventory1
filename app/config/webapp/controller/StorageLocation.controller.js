@@ -1,221 +1,174 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
+    "sap/ui/model/json/JSONModel",
+    'sap/ui/core/Fragment',
+    "sap/m/MessageBox",
     "sap/m/MessageToast",
-    "sap/m/MessageBox" ,
-    "sap/ui/model/Filter" // Add this line to import MessageBox
-], function (Controller, MessageToast, MessageBox,Filter) {
+],
+function (Controller,JSONModel,Fragment,MessageBox,MessageToast) {
     "use strict";
-    var sLocationID
+    let oBusyDialog;
 
     return Controller.extend("config.controller.StorageLocation", {
-        onInit: function () {
-            this.onStorageLocation();
-
+        onInit: function () {    
         },
 
-        onStorageLocation: function () {
-            // Create a JSON Model to hold the StorageLocation data
-            var locationModel = new sap.ui.model.json.JSONModel();
-            this.getView().setModel(locationModel, "locationModel");
-
-            // Retrieve data from the OData service
-            let oModel = this.getOwnerComponent().getModel();
-            let oBindList = oModel.bindList("/StorageLocation");
-
-            // Fetch data and set it to the JSON model
-            oBindList.requestContexts(0, Infinity).then(function (aContexts) {
-                var locationData = [];
-                aContexts.forEach(function (oContext) {
-                    locationData.push(oContext.getObject());
-                });
-
-                // Set the data to the locationModel
-                locationModel.setData({ StorageLocations: locationData });
-
-                // Debugging output (optional)
-                console.log("location", locationData);
-            });
-
-        },
-
-
-        onCreatePress: function () {
-            // Open the create dialog
-            if (!this.createDialog) {
-                this.createDialog = this.byId("createDialog");
+        onCreate: function () {
+            var oView = this.getView();
+            const slocData = {
+                LocationID   : "",
+                LocationName : ""
+            };
+            const slocModel = new JSONModel(slocData);
+            oView.setModel(slocModel, "slocModel");
+            if (!this._oDialogItem) {
+                this._oDialogItem = sap.ui.xmlfragment("config.fragments.addStorageLocation", this);
+                oView.addDependent(this._oDialogItem);
             }
-            this.createDialog.open();
+            this._oDialogItem.open();
         },
 
-        onDialogCreatePress: function () {
-            // Get values from the input fields
-            var locationID = this.byId("locationIDInput").getValue().trim();
-            var locationName = this.byId("locationNameInput").getValue().trim();
+        handleValueHelpClose1: function () {
+            this._oDialogItem.close();
+        },
 
-            // Validate input fields
-            if (!locationID || !locationName) {
-                MessageToast.show("Both Location ID and Location Name must be filled in.");
-                return; // Exit if validation fails
+       
+        onSave :function(){
+            var oView = this.getView();
+            var oTable = this.byId("slocTable");
+            
+            var slocData = this.getView().getModel("slocModel").getData();
+
+            let slocId = slocData.LocationID;
+            let slocName = slocData.LocationName
+            let payload = { 
+                LocationID : slocId ,
+                LocationName: slocName
             }
-
             let oModel = this.getView().getModel();
-            let oBindList = oModel.bindList("/StorageLocation");
-
-            // Check if the locationID already exists
-            let idFilter = new sap.ui.model.Filter("LocationID", sap.ui.model.FilterOperator.EQ, locationID);
-            oBindList.filter(idFilter).requestContexts().then(function (aContexts) {
-                if (aContexts.length > 0) {
-                    // Location ID already exists
-                    MessageToast.show("Location ID already exists. Please use a different ID.");
-                    return; // Exit if validation fails
+         
+            let oBindListSPM = oModel.bindList("/StorageLocation");
+            oBindListSPM.create(payload, true);
+            oBindListSPM.attachCreateCompleted( p => {
+                console.log(p);
+                let p1 = p.getParameters();
+                if( p1.success){
+                    console.log(p1);
                 }
-
-                // Check if the locationName already exists
-                let nameFilter = new sap.ui.model.Filter("LocationName", sap.ui.model.FilterOperator.EQ, locationName);
-                oBindList.filter(nameFilter).requestContexts().then(function (aContextsByName) {
-                    if (aContextsByName.length > 0) {
-                        // Location Name already exists
-                        MessageToast.show("Location Name already exists. Please use a different name.");
-                        return; // Exit if validation fails
-                    }
-
-                    // Prepare the data entry
-                    var locationEntry = {
-                        LocationID: locationID,
-                        LocationName: locationName,
-                    };
-
-                    console.log("locationEntry", locationEntry);
-
-                    // Create the new entry in the OData service
-                    oBindList.create(locationEntry);
-
-                    // Refresh the model and the storage locations after creation
-                    oModel.refresh();
-                    this.onStorageLocation();
-
-                    // Show success message
-                    MessageToast.show("Location Created: " + locationID + " - " + locationName);
-
-                    // Clear the input fields
-                    this.byId("locationIDInput").setValue("");
-                    this.byId("locationNameInput").setValue("");
-
-                    // Close the dialog
-                    this.createDialog.close();
-                }.bind(this)); // Bind the context for the callback
-            }.bind(this)); // Bind the context for the first callback
+                
+            })
+             
+            this._oDialogItem.close();
+            this.getView().getModel().refresh(true);
+            oTable.getBinding("items").refresh(true);
+            setTimeout (() =>{
+            sap.m.MessageToast.show("Storage Location added Successfully");
+            }, 1000);
+            oTable.removeSelections();  
         },
 
-
-
-        onDialogCancelPress: function () {
-            // Close the create dialog
-            this.createDialog.close();
-        },
-
-        onEditPress: function () {
-            var oTable = this.byId("storageTable");
-            var oSelectedItem = oTable.getSelectedItem();
-
-            if (oSelectedItem) {
-                var oContext = oSelectedItem.getBindingContext("locationModel").getObject();
-
-                // Set the selected values to the edit dialog inputs
-                this.byId("editLocationIDInput").setValue(oContext.LocationID);
-                this.byId("editLocationNameInput").setValue(oContext.LocationName);
-
-                // Open the edit dialog
-                if (!this.editDialog) {
-                    this.editDialog = this.byId("editDialog");
-                }
-                this.editDialog.open();
-            } else {
-                MessageToast.show("Please select a row to edit.");
+        onEdit: function () {
+            var oTable = this.byId("slocTable");
+            var aSelectedItems = oTable.getSelectedItems();
+        
+            if (aSelectedItems.length !== 1) {
+                MessageToast.show("Please select exactly one item to edit.");
+                return;
             }
-        },
+        
+            var oSelectedItem = aSelectedItems[0];
+            var oContext = oSelectedItem.getBindingContext();
+            var oData = oContext.getObject();
+            const editMaterialStatusModel = new JSONModel(oData);
+            this.getView().setModel(editMaterialStatusModel, "slocModel");
 
-        onDialogSavePress: function () {
-            var LocationId = this.getView().byId("editLocationIDInput").getValue();
-            var LocationName = this.getView().byId("editLocationNameInput").getValue();
-            let oModel = this.getView().getModel();
-            let oBindList = oModel.bindList("/StorageLocation");
-            let aFilter = new sap.ui.model.Filter("LocationID", sap.ui.model.FilterOperator.EQ, LocationId);
-
-
-            oBindList.filter(aFilter).requestContexts().then(function (aContexts) {
-                if (aContexts.length > 0) {
-                    aContexts[0].setProperty("LocationName", LocationName);
-                    this.onStorageLocation(); // Refresh the storage locations after update
-                    MessageToast.show("Location updated successfully.");
-                } else {
-                    MessageToast.show("Location not found.");
-                }
-            }.bind(this));
-
-            this.editDialog.close();
-        },
-
-        onDialogCancelEditPress: function () {
-            this.editDialog.close();
-        },
-
-        onRowSelect: function (oEvent) {
-            // Get the selected item
-            var oSelectedItem = oEvent.getParameter("listItem");
-            if (oSelectedItem) {
-                // Get the binding context of the selected item
-                var oContext = oSelectedItem.getBindingContext("locationModel");
-                if (oContext) {
-                    // Retrieve the LocationID
-                    sLocationID = oContext.getProperty("LocationID");
-                    console.log("Selected Location ID: ", sLocationID);
-                    // You can now use the sLocationID for further processing
-                }
+            if (!this._oDialog) {
+                this._oDialog = sap.ui.xmlfragment("config.fragments.updateLocation", this);
+                this.getView().addDependent(this._oDialog);
             }
+            this._oDialog.open();
         },
+        
+        onUpdate: async function () {
+            var oView = this.getView();
+            var oTable = this.byId("slocTable");
+            var oModel = oView.getModel();
+            var oUpdateData = oView.getModel("slocModel").getData();
+        
+            let StatusCode = oUpdateData.StatusCode;
+            let StatusDescription = oUpdateData.Description;
 
-        onDeletePress: function () {
-            var oTable = this.byId("storageTable");
-            var oSelectedItem = oTable.getSelectedItem();
+            var aSelectedItems = oTable.getSelectedItems();
 
-            // Check if there are storage locations to delete from
-            if (oTable.getBinding("items").getLength() === 0) {
-                MessageToast.show("No storage locations available.");
+            if (aSelectedItems.length !== 1) {
+                sap.m.MessageToast.show("Please select one item to update.");
                 return;
             }
 
-            if (oSelectedItem) {
-                // Get the binding context of the selected item
-                var oContext = oSelectedItem.getBindingContext("locationModel");
+            var oSelectedItem = aSelectedItems[0];
+            var oContext = oSelectedItem.getBindingContext();
+        
+            let oModel2 = this.getOwnerComponent().getModel();
 
-                // Confirm deletion
-                MessageBox.confirm("Are you sure you want to delete this storage location?", {
-                    title: "Confirm Deletion",
+            if (oContext.getProperty("LocationID") === StatusCode) {
+                oContext.setProperty("LocationName", StatusDescription);
+                try {
+                    await oModel2.submitBatch("update");
+                    sap.m.MessageToast.show("Item updated successfully.");
+                    this._oDialog.close();
+                    oTable.removeSelections();
+                } catch (error) {
+                    sap.m.MessageToast.show("Error updating item: " + error.message);
+                }
+            } else {
+                sap.m.MessageToast.show("The selected items Location ID does not match the update data.");
+            }  
+        },
+        handleValueHelpClose2: function () {
+            var oTable = this.byId("slocTable");
+            this._oDialog.close();
+            oTable.removeSelections();
+        },
+
+
+        onDelete: function () {
+            let oTable = this.byId("slocTable");
+            let aItems = oTable.getSelectedItems();
+
+            if (!aItems.length) {
+              MessageToast.show("Please Select at least one row ");
+              return;
+            }
+            const that = this;
+            sap.ui.require(["sap/m/MessageBox"], function (MessageBox) {
+                MessageBox.confirm(
+                    "Are you sure ,you want  to delete ?", {
+                    title: "Confirm ",
                     onClose: function (oAction) {
                         if (oAction === MessageBox.Action.OK) {
-                            // Proceed with deletion
-                            let oModel = this.getView().getModel();
-                            let oBindList = oModel.bindList("/StorageLocation");
-
-                            let aFilter = new sap.ui.model.Filter("LocationID", sap.ui.model.FilterOperator.EQ, sLocationID);
-
-                            oBindList.filter(aFilter).requestContexts().then(function (aContexts) {
-                                if (aContexts.length > 0) {
-                                    aContexts[0].delete(); // Delete the selected item
-                                    MessageToast.show("Storage location deleted successfully.");
-                                    this.onStorageLocation(); // Refresh the storage locations after deletion
-                                } else {
-                                    MessageToast.show("Location not found.");
-                                }
-                            }.bind(this));
+                        that.deleteSelectedItems(aItems);
+                        } else {
+                        oTable.removeSelections();
+                        sap.m.MessageToast.show("Deletion canceled");
                         }
-                    }.bind(this) // Bind the context for the callback
-                });
-            } else {
-                MessageToast.show("Please select a row to delete.");
-            }
-        }
-
+                    }
+                    }
+                );
+            });
+        },
+        deleteSelectedItems: function (aItems) {
+            let slength = aItems.length;
+            let deleteMsg = slength === 1 ? "Record" : "Records"
+            aItems.forEach(function (oItem) {
+              const oContext = oItem.getBindingContext();
+              oContext.delete().then(function () {
+                MessageToast.show(`${deleteMsg} deleted sucessfully`);
+              }).catch(function (oError) {
+                MessageBox.error("Error deleting item: " + oError.message);
+              });
+            });
+        },
+        
+  
     });
 });

@@ -1,5 +1,16 @@
 ### GET
-GET http://localhost:4004/odata/v4/inventory/rqSubMaterial?$filter=reqNo eq '40002' and Parent_MaterialCode eq 'SC005-BL001'
+
+GET http://localhost:4004/odata/v4/inventory/Material_Status
+
+### create
+POST http://localhost:4004/odata/v4/inventory/Material_Status
+Content-Type: application/json
+
+{
+  "StatusCode":"ddd",
+  "Description":"testing10"
+}
+
 ###
 GET http://localhost:4004/odata/v4/inventory/StorageLocation?$filter=LocationID eq "LOC02"
 

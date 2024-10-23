@@ -30,14 +30,14 @@ function (Controller,JSONModel,Fragment,MessageBox,MessageToast) {
        
         _onSaveMaterialEntry :function(){
             var oTable = this.byId("materialGroupTable");
-            let idField = sap.ui.getCore().byId("idField").getValue()
+            // let idField = sap.ui.getCore().byId("idField").getValue()
             let typeField = sap.ui.getCore().byId("typeField").getValue()
             let locationIdField = sap.ui.getCore().byId("locationIdField").getValue()
             let ZcodeField = sap.ui.getCore().byId("ZcodeField").getValue()
             let usabilityInput = sap.ui.getCore().byId("usabityInput").getValue()
             var oModel = this.getView().getModel();   
             let payload = {
-                "ID": idField,
+                "ID": "",
                 "Type": typeField,
                 "Usability": usabilityInput,
                 "Zcode": ZcodeField,
@@ -50,6 +50,7 @@ function (Controller,JSONModel,Fragment,MessageBox,MessageToast) {
             setTimeout (() =>{
             sap.m.MessageToast.show("Data added successfully");
             }, 1000);
+            
             oTable.removeSelections();  
         },
 

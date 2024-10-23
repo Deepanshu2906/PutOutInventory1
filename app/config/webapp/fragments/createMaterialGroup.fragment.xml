@@ -9,8 +9,8 @@
         afterClose="_handleValueHelpClose1">
 
         <VBox>
-            <Label id="_IDGenLabel17" text="Category ID :" />
-            <Input id="idField" liveChange="inputHandler" placeholder="Enter ID" />
+            <!-- <Label id="_IDGenLabel17" text="Category ID :" />
+            <Input id="idField" liveChange="inputHandler" placeholder="Enter ID" /> -->
             <Label id="_IDGenLabel119" text="Category :" />
             <Input id="typeField" liveChange="inputHandler" placeholder="Enter Category" />
             <Label id="_IDGenLabel182" text="Location ID :" />

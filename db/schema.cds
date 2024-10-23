@@ -63,33 +63,6 @@ entity splitSubMaterialTable {
     Quantity : Integer;
     Remarks : String
 }
-// entity serviceRequest : managed {
-
-//     key reqNo : Integer;
-//     Materials : array of rqMaterial;
-//     createdBy : String(100) @cds.on.insert : $user.id; 
-//     reqStatus : String(20);
-
-// }
-// type  rqMaterial {
-//     reqNo            : Integer;
-//     Category         : String(1);
-//     MaterialCode     : String(20);
-//     Description      : String(255);
-//     Status           : String(20);
-//     Remarks          : String(255);
-//     Quantity         : Integer;
-//     SubcomponentList :  array of rqSubMaterial;
-// }
-// type rqSubMaterial {
-//     Category            : String(1);
-//     Description         : String(20);
-//     MaterialCode        : String(10);
-//     Quantity            : Integer;
-//     Parent_MaterialCode : String(20);
-
-
-// }
 
 
 entity Category  {
