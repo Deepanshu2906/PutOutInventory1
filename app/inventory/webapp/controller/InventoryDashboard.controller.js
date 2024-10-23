@@ -26,7 +26,7 @@ function (Controller, JSONModel, MessageToast,Fragment,Spreadsheet) {
             var oDate = this.byId("dateFilter").getDateValue();
 
             if (sMaterialReqNo) {
-                aFilters.push(new sap.ui.model.Filter("reqNo", sap.ui.model.FilterOperator.Contains, sMaterialReqNo));
+                aFilters.push(new sap.ui.model.Filter("reqNo", sap.ui.model.FilterOperator.EQ, sMaterialReqNo));
             }
 
             if (sCategory) {
