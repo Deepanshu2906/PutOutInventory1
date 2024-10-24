@@ -58,6 +58,7 @@ function (Controller,JSONModel,Fragment,MessageBox,MessageToast) {
 
                     oView.getModel().refresh();
                     oTable.getBinding("items").refresh();
+                    
                 } else {
                     let oContext = p1.context;
                     let msgArr = oContext.oModel.mMessages[""];

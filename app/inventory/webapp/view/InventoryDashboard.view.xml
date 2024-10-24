@@ -93,7 +93,7 @@
                                         <Text text="{Description}"/>
                                         <Text text="{Category}"/>
                                         <Text text="{Quantity}"/>
-                                        <Text text="{Status}"/>
+                                        <Text text="{MatStatus}"/>
                                         <Text text="{createdBy}" />
                                         <Text text="{createdAt}" />
                                         <Button text="View"  type="Accept" press="onViewPress" />

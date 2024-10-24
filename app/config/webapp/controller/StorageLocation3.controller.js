@@ -51,6 +51,7 @@ sap.ui.define([
             // Get values from the input fields
             var locationID = this.byId("locationIDInput").getValue().trim();
             var locationName = this.byId("locationNameInput").getValue().trim();
+            let oTable = this.byId('storageTable');
 
             // Validate input fields
             if (!locationID || !locationName) {
@@ -88,11 +89,19 @@ sap.ui.define([
                     console.log("locationEntry", locationEntry);
 
                     // Create the new entry in the OData service
-                    oBindList.create(locationEntry);
+                    oBindList.create(locationEntry,true);
 
                     // Refresh the model and the storage locations after creation
-                    oModel.refresh();
-                    this.onStorageLocation();
+                    oBindList.attachCreateCompleted( p => {
+                        let p1 = p.getParameters();
+                        if( p1.success){
+                            oModel.refresh();
+
+                            oTable.getBinding("items").refresh();
+                        }
+                    })
+                    
+                    
 
                     // Show success message
                     MessageToast.show("Location Created: " + locationID + " - " + locationName);
@@ -146,7 +155,7 @@ sap.ui.define([
             oBindList.filter(aFilter).requestContexts().then(function (aContexts) {
                 if (aContexts.length > 0) {
                     aContexts[0].setProperty("LocationName", LocationName);
-                    this.onStorageLocation(); // Refresh the storage locations after update
+                     oModel.refresh();
                     MessageToast.show("Location updated successfully.");
                 } else {
                     MessageToast.show("Location not found.");

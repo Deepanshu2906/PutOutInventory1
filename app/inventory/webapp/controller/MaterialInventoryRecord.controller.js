@@ -387,11 +387,31 @@ sap.ui.define([
                     if (p1.success) {
                         let obj = oContext.getObject();
                         console.log(obj);
-                        MessageBox.success(`Material Request No.- ${obj.reqNo} Created Successfully.`);
-            
+                        sap.m.MessageBox.success(`Material Request No.- ${obj.reqNo} Created Successfully.`, {
+                            title: "Success",  // Optional title
+                            actions: [sap.m.MessageBox.Action.OK],  // OK button
+                            onClose: function (oAction) {
+                                if (oAction === sap.m.MessageBox.Action.OK) {
+                                    let oModel = oView.getModel('tempModel');
+                                    oModel.setData({data : [{
+                                        SNo : 1,
+                                        Category:"",
+                                        Quantity: null,
+                                        MaterialCode: "",
+                                        Description:"",
+                                        SubcomponentList: []
+                                    }
+                    ]});
+                                    oModel.refresh();
+                                }
+                            }
+                        });
+                        
+                        materialDataArray = [];
+                        
                         // Refresh models after successful submission
                         oView.getModel().refresh();
-                        oView.getModel('tempModel').refresh();
+                        
                     } else {
                         console.log(p1);
                     }
