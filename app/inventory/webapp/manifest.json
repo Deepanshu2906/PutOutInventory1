@@ -124,6 +124,20 @@
           "target": [
             "TargetRouteGateMaterial"
           ]
+        }, 
+        {
+          "name": "RouteInspection",
+          "pattern": "Inspection",
+          "target": [
+            "TargetRouteInspection"
+          ]
+        },
+        {
+          "name": "RouteInspectionTable",
+          "pattern": "InspectionTable",
+          "target": [
+            "TargetRouteInspectionTable"
+          ]
         }
        
       ],
@@ -162,6 +176,20 @@
           "clearControlAggregation": false,
           "viewId": "SecurityGateInMaterial",
           "viewName": "SecurityGateInMaterial"
+        },
+        "TargetRouteInspection": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Inspection",
+          "viewName": "Inspection"
+        },
+        "TargetRouteInspectionTable": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "InspectionTable",
+          "viewName": "InspectionTable"
         }
       }
     },
