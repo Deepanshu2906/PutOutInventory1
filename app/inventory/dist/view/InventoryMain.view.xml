@@ -1,0 +1,40 @@
+<mvc:View controllerName="inventory.controller.InventoryMain"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:html="http://www.w3.org/1999/xhtml">
+   <Page id="_IDGenPage1" showHeader="false">
+
+   
+       
+        <FlexBox class="masterFlexBox">
+            <GenericTile id="GenGenericTile1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                header="Material Inventory Record" press="onMaterialInventoryRecord" >
+                <TileContent id="_IDGenTileContent1">
+                <ImageContent  src="sap-icon://BusinessSuiteInAppSymbols/icon-vessel"></ImageContent>  
+                
+                </TileContent>
+            </GenericTile>
+
+            <GenericTile id="GenGenericTile2" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                header="Security Gate In" press="onSecurityGateIn">
+                <TileContent >
+                <ImageContent  src="sap-icon://BusinessSuiteInAppSymbols/icon-vessel"></ImageContent>  
+                <!-- <core:Icon class="icon" src="sap-icon://BusinessSuiteInAppSymbols/icon-vessel" /> -->
+                </TileContent>
+            </GenericTile>
+
+            <GenericTile id="GenGenericTile3" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                header="Inspection" press="onInspection">
+                <TileContent >
+                <ImageContent  src="sap-icon://BusinessSuiteInAppSymbols/icon-manage-budget"></ImageContent>  
+                </TileContent>
+            </GenericTile>
+
+            <GenericTile id="GenGenericTile4" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+                header="Dashboard" press="onDashboard">
+                <TileContent >
+                <ImageContent  src="sap-icon://BusinessSuiteInAppSymbols/icon-subclass"></ImageContent>  
+                </TileContent>
+            </GenericTile> 
+        </FlexBox>
+    </Page>
+</mvc:View>
